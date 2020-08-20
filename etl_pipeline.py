@@ -13,6 +13,6 @@ cur.execute("""CREATE TABLE  song (acousticness NUMERIC, artists TEXT,
             popularity NUMERIC, release_date TEXT, speechiness NUMERIC, 
             tempo NUMERIC, valence NUMERIC, year NUMERIC);""")
 
-""""""
+
 df = pd.read_csv('csv/data.csv')
 df.to_sql('song', con, if_exists='append', index=False)
