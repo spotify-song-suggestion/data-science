@@ -44,12 +44,12 @@ def root():
     """Base view."""
 
 
-    """Filters results with 'value' >= 10"""
+
     
     # TODO : 
     # results = songs.query.all()
 
-    # return render_template('home.html', tuple_list=tuple_list, gte10_list=results, city=city, parameter=parameter)
+    # return render_template('home.html',TODO: variable for front end parameter=parameter)
     # return "Spotify Build Week Project : Bring It!!!"
     return render_template('home.html')
 
@@ -87,7 +87,7 @@ def reset():
     return 'Database has been reset'
 
 
-
+# TODO: MACHINE LEARNING MODEL FILL - EXAMPLE FROM TWITOFF
 # @app.route('/suggestion', methods=['POST'])
 # def compare(message=''):
 #     user1  = request.values['user1']
@@ -106,22 +106,3 @@ def reset():
 #     # return render_template('prediction.html', title='Prediction', message=message)
 #     return render_template('base.html', title='Prediction', message=message, users=User.query.all())
 
-    +
-#
-# TODO : ETL info - data pipeline from csv to sqlite
-
-# import sqlite3
-# import pandas as pd
-
-# # load data
-# df = pd.read_csv('dict_output.csv')
-
-# # strip whitespace from headers
-# df.columns = df.columns.str.strip()
-
-# con = sqlite3.connect("city_spec.db")
-
-# # drop data into database
-# df.to_sql("MyTable", con)
-
-# con.close()
