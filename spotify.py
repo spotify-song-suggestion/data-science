@@ -11,13 +11,14 @@ db = SQLAlchemy(app)
 # This class is based off the data.csv file
 # TODO check types with etl_pipeline.py
 class Song(db.Model):
-    id = db.Column(db.Integer, primary_key=True) # G
+    
     acousticness = db.Column(db.Float) #A
     artists = db.Column(db.String(75)) #B
     danceability = db.Column(db.Integer) #C
     duration_ms = db.Column(db.Float) #D
     energy = db.Column(db.Float) #E
     explicit = db.Column(db.Float) #F
+    id = db.Column(db.Integer, primary_key=True) # G
     instrumentalness = db.Column(db.Float) #H
     key = db.Column(db.Integer) #I
     liveness = db.Column(db.Float) #J
@@ -43,16 +44,17 @@ class Song(db.Model):
 @app.route('/', methods=['GET'])
 def root():
     """Base view."""
-
+    db.drop_all()
+    db.create_all()
 
 
     
     # TODO : 
-    # results = song.query.all()
+    results = Song.query.all()
 
     # return render_template('home.html',TODO: variable for front end parameter=parameter)
     # return "Spotify Build Week Project : Bring It!!!"
-    return render_template('home.html')
+    return render_template('home.html', results = results)
 
 
 @app.route('/update') 
