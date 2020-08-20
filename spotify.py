@@ -18,7 +18,7 @@ class Song(db.Model):
     duration_ms = db.Column(db.Float) #D
     energy = db.Column(db.Float) #E
     explicit = db.Column(db.Float) #F
-    id = db.Column(db.Integer, primary_key=True) # G
+    id = db.Column(db.String, primary_key=True) # G
     instrumentalness = db.Column(db.Float) #H
     key = db.Column(db.Integer) #I
     liveness = db.Column(db.Float) #J
@@ -35,7 +35,7 @@ class Song(db.Model):
     def __repr__(self):
         # write a nice representation of Song'
         return '< Title  %r - Artist  %r - Duration(ms) %r >' % (self.name, 
-                                                                 self.artist, 
+                                                                 self.artists, 
                                                                  self.duration_ms)
 
 
@@ -44,8 +44,8 @@ class Song(db.Model):
 @app.route('/', methods=['GET'])
 def root():
     """Base view."""
-    db.drop_all()
-    db.create_all()
+    # db.drop_all()
+    # db.create_all()
 
 
     
@@ -54,8 +54,8 @@ def root():
 
     # return render_template('home.html',TODO: variable for front end parameter=parameter)
     # return "Spotify Build Week Project : Bring It!!!"
-    return render_template('home.html', results = results)
-
+    # return render_template('home.html', results = results)
+    return str(results)
 
 @app.route('/update') 
 def update():
