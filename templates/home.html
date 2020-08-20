@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spotify Song Suggestion</title>
+    <link rel="stylesheet" href="https://unpkg.com/picnic"/>
+  </head>
+  <body>
+    <nav>
+      <a href="/" class="brand"><span>Spotify Song Suggestion</span></a>
+
+      <!-- responsive-->
+      <input id="bmenub" type="checkbox" class="show">
+      <label for="bmenub" class="burger pseudo button">Menu</label>
+
+      <div class="menu">
+        <a href="/update" class="button warning">New Suggestion Playlist</a>
+      </div>
+    </nav>
+
+    <article class="flex two" style="padding: 3em 1em;">
+      {% block content %}
+      <div>
+        <h1>{{ title }}</h1>
+        <p>Please Select 10 of Your Favorite Songs:</p>
+        <form action="/compare" method="post">
+          <select name="user1">
+            {% for user in users %}
+            <option value="{{ user.username }}">@{{ user.username }}</option>
+            {% endfor %}
+          </select>
+          <select name="user2">
+            {% for user in users %}
+            <option value="{{ user.username }}">@{{ user.username }}</option>
+            {% endfor %}
+          </select>
+          <input type="text" name="tweet_text" placeholder="This is just a Demo Page more to come.">
+         
+          <input type="submit" value="Clear Songs">
+        </form>
+      </div>
+      <div>
+        <h2>This could be for a heatmap of songs by user</h2>
+        {% for user in users %}
+        <a href="/user/{{ user.username }}"><span class="stack">@{{ user.username }}</span></a>
+        {% endfor %}
+        <form action="/user" method="post">
+          <input type="text" name="user_name" placeholder="User to add">
+          <input type="submit" value="More Info">
+        </form>
+      </div>
+      <div id="prediction">
+        <h2>Results</h2>
+        <br>
+        <p>{{ message }}</p>
+        <br>
+        <a href="/" class="button warning">Try Another Prediction</a>
+        <p><div id="footer">
+          <hr>
+          &copy; Copyright 2020      Jeffrey Asuncion |
+          <a href="https://github.com/JeffreyAsuncion/">source</a>
+        </div></p>
+      </div>
+      {% endblock %}
+    </article>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/umbrellajs"/> -->
+
+  </body>
+</html>

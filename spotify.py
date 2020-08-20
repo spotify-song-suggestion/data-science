@@ -2,16 +2,17 @@
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 
+#  pipenv install flask FLASK-SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///song.sqlite3'
-db = SQLAlchemy(APP)
+db = SQLAlchemy(app)
 
-
+# This class is based off the data.csv file
 class Songs(db.Model):
     id = db.Column(db.Integer, primary_key=True) # G
     acousticness = db.Column(db.Float) #A
-    artists = db.Column(DB.String(75)) #B
+    artists = db.Column(db.String(75)) #B
     danceability = db.Column(db.Integer) #C
     duration_ms = db.Column(db.Float) #D
     energy = db.Column(db.Float) #E
@@ -21,7 +22,7 @@ class Songs(db.Model):
     liveness = db.Column(db.Float) #J
     loudness = db.Column(db.Float) #K
     mode = db.Column(db.Integer) #L
-    name = db.Column(DB.String(100)) #M Label 
+    name = db.Column(db.String(100)) #M Label 
     popularity = db.Column(db.Integer) #N
     release_date = db.Column(db.String(20)) #O
     speechiness = db.Column(db.Float) #P
@@ -38,37 +39,27 @@ class Songs(db.Model):
 
 
 
-@APP.route('/', methods=['GET'])
+@app.route('/', methods=['GET'])
 def root():
     """Base view."""
-    ## PART 2
-    ## This pulls in fresh data from the OpenAQ API
-    api = openaq.OpenAQ()
-    tuple_list = get_api_data(api, city, parameter)
-    
-    # TODO :
-    # 2nd pull from api
-    # second_pull_from_api = get_api_latest_data(api)
+
 
     """Filters results with 'value' >= 10"""
-    # PART 4
-    # This queries the DB to filter value >= 10
-    results = Record.query.filter(Record.value >= 10).all()
     
     # TODO : 
-    # results_2nd_pull = Place.query.all()
+    # results = songs.query.all()
 
-    return render_template('home.html', tuple_list=tuple_list, gte10_list=results, city=city, parameter=parameter)
+    # return render_template('home.html', tuple_list=tuple_list, gte10_list=results, city=city, parameter=parameter)
+    # return "Spotify Build Week Project : Bring It!!!"
+    return render_template('home.html')
 
 
-
-
-@APP.route('/refresh')
+@app.route('/refresh')
 def refresh():
     root()
     """Pull fresh data from Open AQ and replace existing data."""
-    DB.drop_all()
-    DB.create_all()
+    db.drop_all()
+    db.create_all()
 
     #
     # TODO: ETL pipeline data from csv to sqlite
@@ -77,18 +68,38 @@ def refresh():
     # # Example of looping through a list, row by row
     # for i in range(len(tuple_list)):   
     #     list_new = Record(id=i, datetime=date_utc[i], value=value[i])
-    #     DB.session.add(list_new)
+    #     db.session.add(list_new)
     
 
     # STORE IN DATABASE
-    DB.session.commit()
+    db.session.commit()
     
     return render_template('refresh.html')
 
 
-@APP.route('/reset')
+@app.route('/reset')
 def reset():
-    DB.drop_all()
-    DB.create_all()
-    # return render_template('base.html', title='Database has been Reset!', users=User.query.all())
+    db.drop_all()
+    db.create_all()
+    # return render_template('home.html', title='Database has been Reset!', TODO: vars=User.query.all())
     return 'Database has been reset'
+
+
+#
+# TODO : ETL info - data pipeline from csv to sqlite
+
+# import sqlite3
+# import pandas as pd
+
+# # load data
+# df = pd.read_csv('dict_output.csv')
+
+# # strip whitespace from headers
+# df.columns = df.columns.str.strip()
+
+# con = sqlite3.connect("city_spec.db")
+
+# # drop data into database
+# df.to_sql("MyTable", con)
+
+# con.close()
