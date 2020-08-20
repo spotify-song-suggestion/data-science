@@ -70,7 +70,8 @@ def update():
 
     # # Example of looping through a list, row by row
     # for i in range(len(tuple_list)):   
-    #     list_new = Record(id=i, datetime=date_utc[i], value=value[i])
+    #     list_new = Record(id=i, datetime=date_utc[i], value=va
+    # lue[i])
     #     db.session.add(list_new)
     
 
