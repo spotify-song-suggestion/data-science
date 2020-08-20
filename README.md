@@ -2,5 +2,5 @@
 
 
 # to Run flask app
-export FLASK_APP=stopify.py
+export FLASK_APP=spotify.py
 flask run

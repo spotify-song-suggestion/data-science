@@ -6,7 +6,7 @@ import pandas as pd
 con = sqlite3.connect('song.sqlite3')
 cur = con.cursor()
 # TODO check types with spotify.py
-cur.execute("""CREATE TABLE  song(acousticness NUMERIC, artists TEXT, 
+cur.execute("""CREATE TABLE  song (acousticness NUMERIC, artists TEXT, 
             danceability NUMERIC, duration_ms NUMERIC, energy NUMERIC, 
             explicit NUMERIC, id TEXT, instrumentalness NUMERIC, key INTEGER, 
             liveness NUMERIC, loudness NUMERIC, mode INTEGER, name TEXT, 
