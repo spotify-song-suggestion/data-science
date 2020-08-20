@@ -9,7 +9,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///song.sqlite3'
 db = SQLAlchemy(app)
 
 # This class is based off the data.csv file
-class Songs(db.Model):
+# TODO check types with etl_pipeline.py
+class Song(db.Model):
     id = db.Column(db.Integer, primary_key=True) # G
     acousticness = db.Column(db.Float) #A
     artists = db.Column(db.String(75)) #B
@@ -31,7 +32,7 @@ class Songs(db.Model):
     year = db.Column(db.Integer) #S
  
     def __repr__(self):
-        # write a nice representation of Songs'
+        # write a nice representation of Song'
         return '< Title  %r - Artist  %r - Duration(ms) %r >' % (self.name, 
                                                                  self.artist, 
                                                                  self.duration_ms)
@@ -47,7 +48,7 @@ def root():
 
     
     # TODO : 
-    # results = songs.query.all()
+    # results = song.query.all()
 
     # return render_template('home.html',TODO: variable for front end parameter=parameter)
     # return "Spotify Build Week Project : Bring It!!!"
@@ -82,13 +83,16 @@ def reset():
     db.drop_all()
     db.create_all()
 
+    #
+    # TODO: ETL pipeline data from csv to sqlite
+    #
 
     # return render_template('home.html', title='Database has been Reset!', TODO: vars=User.query.all())
     return 'Database has been reset'
 
 
 # TODO: MACHINE LEARNING MODEL FILL - EXAMPLE FROM TWITOFF
-# @app.route('/suggestion', methods=['POST'])
+# @app.route('/suggest', methods=['POST'])
 # def compare(message=''):
 #     user1  = request.values['user1']
 #     user2  = request.values['user2']
