@@ -50,12 +50,12 @@ def root():
 
     
     # TODO : 
-    results = Song.query.all()
+    results = Song.query.limit(10).all()
 
     # return render_template('home.html',TODO: variable for front end parameter=parameter)
     # return "Spotify Build Week Project : Bring It!!!"
-    # return render_template('home.html', results = results)
-    return str(results)
+    return render_template('home.html', results = results)
+    # return str(results) # this was 1st trial to see 
 
 @app.route('/update') 
 def update():

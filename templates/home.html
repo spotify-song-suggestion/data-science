@@ -34,7 +34,7 @@
             {% endfor %}
           </select>
           <input type="text" name="tweet_text" placeholder="This is just a Demo Page more to come.">
-          <p>{{  results }}</p>
+          
           <input type="submit" value="Clear Songs">
         </form>
       </div>
@@ -51,6 +51,11 @@
       <div id="prediction">
         <h2>Results</h2>
         <br>
+        {% for result in results %}
+        <span class="stack"><li>{{ result }}</li></span>
+        {% endfor %}
+        <br>
+        <h3>This is the list of results from Query</h3>
         <p>{{ results }}</p>
         <br>
         <a href="/" class="button warning">Try Another Prediction</a>
