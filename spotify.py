@@ -54,8 +54,8 @@ def root():
     return render_template('home.html')
 
 
-@app.route('/refresh')
-def refresh():
+@app.route('/update') 
+def update():
     root()
     """Pull fresh data from Open AQ and replace existing data."""
     db.drop_all()
@@ -81,10 +81,32 @@ def refresh():
 def reset():
     db.drop_all()
     db.create_all()
+
+
     # return render_template('home.html', title='Database has been Reset!', TODO: vars=User.query.all())
     return 'Database has been reset'
 
 
+
+# @app.route('/suggestion', methods=['POST'])
+# def compare(message=''):
+#     user1  = request.values['user1']
+#     user2  = request.values['user2']
+#     tweet_text = request.values['tweet_text']
+
+#     if user1 == user2:
+#         message = 'Cannot compare a user to themselves'
+#     else:
+#         prediction = predict_user(user1, user2, tweet_text)
+#         # message = '"{}" is more likely to be said \nby @{} than @{}'.format(
+#         #     tweet_text, user1 if prediction else user2, user2 if prediction else user1
+#         # )
+#         message = '@{}  is most likely to say "{}" than @{}'.format(
+#             user1 if prediction else user2, tweet_text, user2 if prediction else user1)
+#     # return render_template('prediction.html', title='Prediction', message=message)
+#     return render_template('base.html', title='Prediction', message=message, users=User.query.all())
+
+    +
 #
 # TODO : ETL info - data pipeline from csv to sqlite
 
