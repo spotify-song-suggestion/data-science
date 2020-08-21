@@ -40,13 +40,14 @@
       </div>
       <div>
         <h2>This could be for a heatmap of songs by user</h2>
-        {% for user in users %}
-        <a href="/user/{{ user.username }}"><span class="stack">@{{ user.username }}</span></a>
-        {% endfor %}
-        <form action="/user" method="post">
-          <input type="text" name="user_name" placeholder="User to add">
-          <input type="submit" value="More Info">
-        </form>
+        <form method="POST" action="/output">
+          Song Name : <input type="text" name="user_input_song">
+          <input type="submit">
+      </form>
+      <form method="POST" action="/artist_tracks">
+          Get All Tracks of An Artist : <input type="text" name="get_artist_tracks">
+          <input type="submit">
+      </form>
       </div>
       <div id="prediction">
         <h2>Results</h2>

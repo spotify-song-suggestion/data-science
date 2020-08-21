@@ -40,3 +40,19 @@ def output():
     results = spotify.search(str(user_input_song), type="track", limit=1)
 
     return results
+
+@app.route('/test-1')
+def album_name():
+    birdy_uri = 'spotify:artist:2WX2uTcsvV5OnS0inACecP'
+    # spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+
+    results = spotify.artist_albums(birdy_uri, album_type='album')
+    albums = results['items']
+    while results['next']:
+        results = spotify.next(results)
+        albums.extend(results['items'])
+
+    # for album in albums:
+    #     print(album['name'])
+    return str(albums[0])
+    # return render_template('home.html', results=albums['name'])
