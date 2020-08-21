@@ -1,6 +1,8 @@
 """Spotify Suggested Playlist Dashboard with Flask."""
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
+import sqlite3
+import pandas as pd
 
 #  pipenv install flask FLASK-SQLAlchemy
 
@@ -84,16 +86,15 @@ def update():
     return render_template('refresh.html')
 
 
+"""reset route for song sqlite3 DB"""
+
 @app.route('/reset')
 def reset():
     db.drop_all()
     db.create_all()
-
-    #
-    # TODO: ETL pipeline data from csv to sqlite
-    #
-
-    # return render_template('home.html', title='Database has been Reset!', TODO: vars=User.query.all())
+    con = sqlite3.connect('song.sqlite3')
+    df = pd.read_csv('csv/data.csv')
+    df.to_sql('song', con, if_exists='append', index=False)
     return 'Database has been reset'
 
 # TODO: MACHINE LEARNING MODEL FILL - EXAMPLE FROM TWITOFF
