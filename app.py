@@ -31,3 +31,12 @@ spotify = spotipy.Spotify(auth=token)
 def index():
     return render_template('index.html')
 
+@app.route('/output', methods=['POST'])
+def output():
+    # connecting html to request
+    # User inputs song name here
+    user_input_song = request.form['user_input_song']
+    # spotify search params
+    results = spotify.search(str(user_input_song), type="track", limit=1)
+
+    return results

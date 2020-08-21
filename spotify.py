@@ -42,6 +42,13 @@ class Song(db.Model):
 @app.route('/', methods=['GET'])
 def root():
     """Base view."""
+    
+    # get creds
+    # open connection to spotify api 
+
+
+
+
     # db.drop_all()
     # db.create_all()
 
