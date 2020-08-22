@@ -41,6 +41,9 @@ def output():
 
     return results
 
+# the following routes are examples from the link below
+# https://spotipy.readthedocs.io/en/2.13.0/
+# here’s a quick example of using Spotipy to list the names of all the albums released by the artist ‘Birdy’:
 @app.route('/test-1')
 def album_name():
     birdy_uri = 'spotify:artist:2WX2uTcsvV5OnS0inACecP'
@@ -52,7 +55,23 @@ def album_name():
         results = spotify.next(results)
         albums.extend(results['items'])
 
-    # for album in albums:
-    #     print(album['name'])
+    for album in albums:
+        print(album['name'])
     return str(albums[0])
     # return render_template('home.html', results=albums['name'])
+
+#how to get 30 second samples and cover art for the top 10 tracks for Led Zeppelin:
+@app.route('/test-2')
+def top10():
+    # URI FOR LED ZEPPELIN
+    lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
+    results = spotify.artist_top_tracks(lz_uri)
+
+    for track in results['tracks'][:10]:
+        print('track    : ' + track['name'])
+        print('audio    : ' + track['preview_url'])
+        print('cover art: ' + track['album']['images'][0]['url'])
+        print()
+    # return str(results['tracks'][0]['name'])#, results['tracks'][0]['preview_url'], results['tracks'][0]['album']['images'][0]['url'])
+    return str(results['tracks'][0]['name']) +' '+ str(results['tracks'][0]['preview_url']) + ' ' + str(results['tracks'][0]['album']['images'][0]['url'])
+
