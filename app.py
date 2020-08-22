@@ -72,6 +72,26 @@ def top10():
         print('audio    : ' + track['preview_url'])
         print('cover art: ' + track['album']['images'][0]['url'])
         print()
-    # return str(results['tracks'][0]['name'])#, results['tracks'][0]['preview_url'], results['tracks'][0]['album']['images'][0]['url'])
+    # return str(results['tracks'][0]['name']), 
+    # results['tracks'][0]['preview_url'], 
+    # results['tracks'][0]['album']['images'][0]['url'])
     return str(results['tracks'][0]['name']) +' '+ str(results['tracks'][0]['preview_url']) + ' ' + str(results['tracks'][0]['album']['images'][0]['url'])
 
+# TODO: MACHINE LEARNING MODEL FILL - EXAMPLE FROM TWITOFF
+# @app.route('/suggest', methods=['POST'])
+# def compare(message=''):
+#     user1  = request.values['user1']
+#     user2  = request.values['user2']
+#     tweet_text = request.values['tweet_text']
+
+#     if user1 == user2:
+#         message = 'Cannot compare a user to themselves'
+#     else:
+#         prediction = predict_user(user1, user2, tweet_text)
+#         # message = '"{}" is more likely to be said \nby @{} than @{}'.format(
+#         #     tweet_text, user1 if prediction else user2, user2 if prediction else user1
+#         # )
+#         message = '@{}  is most likely to say "{}" than @{}'.format(
+#             user1 if prediction else user2, tweet_text, user2 if prediction else user1)
+#     # return render_template('prediction.html', title='Prediction', message=message)
+#     return render_template('base.html', title='Prediction', message=message, users=User.query.all())
