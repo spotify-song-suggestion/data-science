@@ -11,6 +11,8 @@ flask-sqlalchemy = "*"
 pandas = "*"
 spotipy = "*"
 python-dotenv = "*"
+plotly = "*"
+"plotly.express" = "*"
 
 [requires]
 python_version = "3.8"
