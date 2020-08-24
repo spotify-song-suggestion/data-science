@@ -113,5 +113,7 @@ def reset():
 #         # )
 #         message = '@{}  is most likely to say "{}" than @{}'.format(
 #             user1 if prediction else user2, tweet_text, user2 if prediction else user1)
-#     # return render_template('prediction.html', title='Prediction', message=message)
+#     # return render_template('prediction.html', 
+#                               title='Prediction', 
+#                               message=message)
 #     return render_template('base.html', title='Prediction', message=message, users=User.query.all())
