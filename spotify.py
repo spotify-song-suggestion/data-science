@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 import pandas as pd
 
-#  pipenv install flask FLASK-SQLAlchemy
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///song.sqlite3'
