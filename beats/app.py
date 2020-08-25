@@ -59,35 +59,34 @@ def create_app():
         return results
 
     # this route returns a list of up to 10 tracks of a artist
-    @app.route('/test3')
-    @app.route('/test/<input_artist>')
-    # def example3():
+    @app.route('/getsongs')
+    @app.route('/getsongsbyartist/<input_artist>')
     def example3(input_artist=None):
         input_artist = request.values['input_artist']
 
         spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
         if input_artist == "":
             return "Can't Touch This! Hammer Time!"
-
         if "_" in input_artist:
             input_artist = input_artist.replace("_"," ")
-        
         name = input_artist
-        # if len(sys.argv) > 1:
-        #     name = ' '.join(sys.argv[1:])
-        # else:
-        #     # name = 'Radiohead'
-        #     name = 'Michael Jackson'
-
         # results = spotify.search(q='artist:' + name, type='artist') # original
-        results = spotify.search(q='artist:' + name, type=['track','artist'])
-        #items = results['artists']['items'] # base
+        results = spotify.search(q='artist:' + name, type=['track']) # out with 'artist',
         
+        # items = results['artist']['items'] # base        
         # if len(items) > 0:
         #     artist = items[0]
         #     print(artist['name'], artist['images'][0]['url'])
+        
+        #TODO make this cleaner 
+        items = results['tracks']
+        # items = results['artists']['items']
+        # track = item[0]
+        return items
+        # return track
+        # return results # this works
+        # TODO return artist
 
-        return results #was a str
 
     @app.route('/songsuggester')
     def feedmodel():
