@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Spotify Song Suggestion</title>
+    <title>Best Beats : Spotify Song Suggestion</title>
     <link rel="stylesheet" href="https://unpkg.com/picnic"/>
   </head>
   <body>
     <nav>
-      <a href="/" class="brand"><span>Spotify Song Suggestion</span></a>
+      <a href="/" class="brand"><span>Best Beats : Spotify Song Suggestion</span></a>
 
       <!-- responsive-->
       <input id="bmenub" type="checkbox" class="show">
@@ -21,7 +21,7 @@
       {% block content %}
       <div>
         <h1>{{ title }}</h1>
-        <p>Please Select 10 of Your Favorite Songs:</p>
+        <p>Please Select 5 of Your Favorite Songs:</p>
         <form action="/compare" method="post">
           <select name="user1">
             {% for user in users %}
@@ -29,6 +29,21 @@
             {% endfor %}
           </select>
           <select name="user2">
+            {% for user in users %}
+            <option value="{{ user.username }}">@{{ user.username }}</option>
+            {% endfor %}
+          </select>
+          <select name="user3">
+            {% for user in users %}
+            <option value="{{ user.username }}">@{{ user.username }}</option>
+            {% endfor %}
+          </select>
+          <select name="user4">
+            {% for user in users %}
+            <option value="{{ user.username }}">@{{ user.username }}</option>
+            {% endfor %}
+          </select>
+          <select name="user5">
             {% for user in users %}
             <option value="{{ user.username }}">@{{ user.username }}</option>
             {% endfor %}
