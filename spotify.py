@@ -41,6 +41,24 @@ class Song(db.Model):
                                                                  self.duration_ms)
 
 
+class History(db.Model):
+    # is this a foreign key and how to link the tables
+    id = db.Column(db.String, primary_key=True)
+    name = db.Column(db.String(100))
+    acousticness  = db.Column(db.Float)	
+    danceability = db.Column(db.Integer)	
+    energy = db.Column(db.Float)
+    instrumentalness = db.Column(db.Float)	
+    liveness = db.Column(db.Float)	
+    loudness = db.Column(db.Float)	
+    speechiness	= db.Column(db.Float)
+    tempo = db.Column(db.Float)	
+    valence = db.Column(db.Float)
+
+
+
+
+
 @app.route('/', methods=['GET'])
 def root():
     """Base view."""

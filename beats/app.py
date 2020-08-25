@@ -47,13 +47,27 @@ def create_app():
 
     @app.route('/output', methods=['POST'])
     def output():
-        # connecting html to request
         # User inputs song name here
         user_input_song = request.form['user_input_song']
         # spotify search params
         results = spotify.search(str(user_input_song), type="track", limit=1)
-
         return results
+
+    @app.route('/songsuggester')
+    def feedmodel():
+        # User inputs song name here
+        user_input_song = request.form['user_input_song']
+
+        # search db for song features
+        # twitoff app.py line 30
+        ssresult = Song.query(Song.name == user_input_song).one() 
+        # NOTE ssresult this is a list       
+        
+        return ssresults # this should break into name and features
+
+
+
+
 
     # the following routes are examples from the link below
     # https://spotipy.readthedocs.io/en/2.13.0/
