@@ -31,6 +31,10 @@ spotify = spotipy.Spotify(auth=token)
 def index():
     return render_template('index.html')
 
+@app.route('/song')
+def getsong():
+    return render_template('asksong.html')
+
 @app.route('/output', methods=['POST'])
 def output():
     # connecting html to request
