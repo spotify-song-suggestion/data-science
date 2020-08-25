@@ -13,6 +13,8 @@ spotipy = "*"
 python-dotenv = "*"
 plotly = "*"
 "plotly.express" = "*"
+gunicorn = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.8"
