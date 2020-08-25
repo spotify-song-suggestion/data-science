@@ -66,7 +66,9 @@ def create_app():
         return ssresults # this should break into name and features
 
 
-
+    @app.route('/hello')
+    def hello_world():
+        return 'hello'
 
 
     # the following routes are examples from the link below
@@ -106,29 +108,37 @@ def create_app():
         return str(results['tracks'][0]['name']) +' '+ str(results['tracks'][0]['preview_url']) + ' ' + str(results['tracks'][0]['album']['images'][0]['url'])
     
     
-    
-    @app.route('/test-3')
-    # @app.route('/test-3/<input_artist>')
-    def example3():
-    # def example3(input_artist=None):
+    # this route returns a list of up to 10 tracks of a artist
+    @app.route('/test3')
+    @app.route('/test/<input_artist>')
+    # def example3():
+    def example3(input_artist=None):
+        input_artist = request.values['input_artist']
 
         spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+        # if input_artist == "":
+        #     results = []
+        #     return results
+
         # if "_" in input_artist:
         #     input_artist = input_artist.replace("_"," ")
-        name = 'Michael Jackson'
+        
+        name = input_artist
         # if len(sys.argv) > 1:
         #     name = ' '.join(sys.argv[1:])
         # else:
         #     # name = 'Radiohead'
         #     name = 'Michael Jackson'
 
-        results = spotify.search(q='artist:' + name, type='artist')
+        # results = spotify.search(q='artist:' + name, type='artist') # original
+        results = spotify.search(q='artist:' + name, type=['track','artist'])
         #items = results['artists']['items'] # base
         
         # if len(items) > 0:
         #     artist = items[0]
         #     print(artist['name'], artist['images'][0]['url'])
-        return str(results)
+
+        return results #was a str
 
 
     # TODO: MACHINE LEARNING MODEL FILL - EXAMPLE FROM TWITOFF
