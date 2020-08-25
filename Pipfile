@@ -15,6 +15,7 @@ plotly = "*"
 "plotly.express" = "*"
 gunicorn = "*"
 psycopg2 = "*"
+simplejson = "*"
 
 [requires]
 python_version = "3.8"

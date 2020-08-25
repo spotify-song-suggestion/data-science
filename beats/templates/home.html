@@ -20,7 +20,7 @@
     <article class="flex two" style="padding: 3em 1em;">
       {% block content %}
       <div>
-        <h1>{{ title }}</h1>
+        <h1>Best Beats : Spotify Song Suggester</h1>
         <p>Please Select 5 of Your Favorite Songs:</p>
         <form action="/compare" method="post">
           <select name="user1">
@@ -54,16 +54,23 @@
         </form>
       </div>
       <div>
-        <h2>Please Enter a Song</h2>
+        <h2>Please Enter an Artist - for more artist info</h2>
+        <form action="/getartistinfo">
+          <input type="text" name="input_artist" placeholder="Enter Artist Name">
+          <input type="submit">
+        </form>
+        <br>
+        <h2>Please Enter a Song - for more info on track</h2>
         <form method="POST" action="/output">
-          Song Name : <input type="text" name="user_input_song">
+          <input type="text" name="user_input_song" placeholder="Enter Song Name">
           <input type="submit">
-      </form>
-      <br>
-      <form action="/getsongs">
-          Get Up to 10 Tracks of An Artist : <input type="text" name="input_artist">
+        </form>
+        <br>
+        <h2>Get More songs from your favorite Artist</h2>
+        <form action="/getsongs">
+          <input type="text" name="input_artist" placeholder="Get Up to 10 Tracks of Your Favorite Artist">
           <input type="submit">
-      </form>
+        </form>
       </div>
       <div id="prediction">
         <h2>Results</h2>
