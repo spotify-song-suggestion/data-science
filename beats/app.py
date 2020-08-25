@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-
+# wrap this in a function
 market = ["us"]
 
 client_id = getenv('SPOTIPY_CLIENT_ID')
@@ -104,6 +104,32 @@ def create_app():
         # results['tracks'][0]['preview_url'], 
         # results['tracks'][0]['album']['images'][0]['url'])
         return str(results['tracks'][0]['name']) +' '+ str(results['tracks'][0]['preview_url']) + ' ' + str(results['tracks'][0]['album']['images'][0]['url'])
+    
+    
+    
+    @app.route('/test-3')
+    # @app.route('/test-3/<input_artist>')
+    def example3():
+    # def example3(input_artist=None):
+
+        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+        # if "_" in input_artist:
+        #     input_artist = input_artist.replace("_"," ")
+        name = 'Michael Jackson'
+        # if len(sys.argv) > 1:
+        #     name = ' '.join(sys.argv[1:])
+        # else:
+        #     # name = 'Radiohead'
+        #     name = 'Michael Jackson'
+
+        results = spotify.search(q='artist:' + name, type='artist')
+        #items = results['artists']['items'] # base
+        
+        # if len(items) > 0:
+        #     artist = items[0]
+        #     print(artist['name'], artist['images'][0]['url'])
+        return str(results)
+
 
     # TODO: MACHINE LEARNING MODEL FILL - EXAMPLE FROM TWITOFF
     # @app.route('/suggest', methods=['POST'])
