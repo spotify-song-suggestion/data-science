@@ -57,6 +57,35 @@ def create_app():
         '''
         return render_template('asksong.html')
 
+     
+    @app.route('/artistinfo')
+    @app.route('/artist/<input_artist>')
+    def getartist(input_artist=None):
+        '''
+        this route returns more info about an artist
+        # print(artist['name'])
+        # print(str(artist['followers']['total']) + " followers")
+        # print(artist['genres'][0])
+        # print(artist['images'][0]['url'])
+        '''
+        input_artist = request.values['input_artist']
+        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+        if input_artist == "":
+            return "Can't Touch This! Hammer Time!"
+        if "_" in input_artist:
+            input_artist = input_artist.replace("_"," ")
+        name = input_artist
+
+        # Search of the artist
+        searchResults = spotify.search(q='artist:' + name, limit=2, offset=0, type=['artist'])
+        artist = searchResults['artists']['items'][0]
+
+        print(simplejson.dumps(searchResults, sort_keys=True, indent=4)) # full json
+        print(simplejson.dumps(artist, sort_keys=True, indent=4)) # short version
+        return artist
+
+
+
     @app.route('/songinfo', methods=['POST']) #/output changed to songinfo
     def output():
         # User inputs song name here 
@@ -65,60 +94,16 @@ def create_app():
         # spotify search params
         results = spotify.search(str(user_input_song), type="track", limit=1)
         return results
-
-    # this route returns more info about an artist
-    @app.route('/artistinfo')
-    @app.route('/artist/<input_artist>')
-    def getartist(input_artist=None):
-
-        input_artist = request.values['input_artist']
-        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
-        if input_artist == "":
-            return "Can't Touch This! Hammer Time!"
-        if "_" in input_artist:
-            input_artist = input_artist.replace("_"," ")
-        name = input_artist
-
-        ##### This is from LEARN SPOTIFY 6
-        # Search of the artist
-        
-        # Get search results
-        searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])# from LEARN SPOTIFY 5 5:05 added limit=10, offset=0
-        print(simplejson.dumps(searchResults, sort_keys=True, indent=4))
-        results = simplejson.dumps(searchResults, sort_keys=True, indent=4) #V6T1:12
-
-        artist = searchResults['artists']['items'][0]
-        print(artist['name'])
-        print(str(artist['followers']['total']) + " followers")
-        print(artist['genres'][0])
-        print(artist['images'][0]['url'])
-        print()
-
-        return artist
-        # TODO return artist just double check format for Front End
-        # TODO make this a JSON
-        # TODO make this another route and button
+   
 
 
-    # this route returns a list of all tracks of a artist
     @app.route('/getsongs')
     @app.route('/getsongsbyartist/<input_artist>')
     def getsonginfo(input_artist=None):
-
-        input_artist = request.values['input_artist']
-        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
-        if input_artist == "":
-            return "Can't Touch This! Hammer Time!"
-        if "_" in input_artist:
-            input_artist = input_artist.replace("_"," ")
-        name = input_artist
-
-        # Search of the artist
-        searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])
-        artist = searchResults['artists']['items'][0]
-        artistID = artist['id']
-        ##### This is from LEARN SPOTIFY 7
-
+        '''
+        this route returns a list of all tracks of a artist
+        
+        # the Following code to make sense of the JSON file
         # Album and track details
         trackNames = []
         trackURIs = []
@@ -133,11 +118,9 @@ def create_app():
             print("ALBUM " + item['name'])
             albumID = item['id']
             albumArt = item['images'][0]['url']
-
             # Extract track data
             trackResults = spotify.album_tracks(albumID)
             trackResults = trackResults['items']
-
             for item in trackResults:
                 print(str(z) + ": " + item['name'])
                 trackNames.append(item['name'])
@@ -146,12 +129,22 @@ def create_app():
                 z+=1
             print()
         
-        result_string = str(list(zip(trackNames, trackURIs, trackArt)))
+        '''
+        input_artist = request.values['input_artist']
+        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+        if input_artist == "":
+            return "Can't Touch This! Hammer Time!"
+        if "_" in input_artist:
+            input_artist = input_artist.replace("_"," ")
+        name = input_artist
 
-        return result_string
-        # return track
-        # return results # this works
-        # TODO return artist
+        # Search of the artist
+        searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])
+        artist = searchResults['artists']['items'][0]
+        artistID = artist['id']
+        albumResults = spotify.artist_albums(artistID)
+
+        return albumResults
 
 
     @app.route('/songsuggester')
