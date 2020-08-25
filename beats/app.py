@@ -58,17 +58,18 @@ def create_app():
         '''
         return render_template('asksong.html')
 
-    @app.route('/output', methods=['POST'])
+    @app.route('/songinfo', methods=['POST']) #/output changed to songinfo
     def output():
         # User inputs song name here 
         user_input_song = request.form['user_input_song']
+
         # spotify search params
         results = spotify.search(str(user_input_song), type="track", limit=1)
         return results
 
- # this route returns a list of up to 10 tracks of a artist
-    @app.route('/getartistinfo')
-    @app.route('/getartist/<input_artist>')
+    # this route returns more info about an artist
+    @app.route('/artistinfo')
+    @app.route('/artist/<input_artist>')
     def getartist(input_artist=None):
 
         input_artist = request.values['input_artist']
@@ -83,7 +84,7 @@ def create_app():
         # Search of the artist
         
         # Get search results
-        searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])# from LEARN SPOTIFY vid 5 5:05 added limit=10, offset=0
+        searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])# from LEARN SPOTIFY 5 5:05 added limit=10, offset=0
         print(simplejson.dumps(searchResults, sort_keys=True, indent=4))
         results = simplejson.dumps(searchResults, sort_keys=True, indent=4) #V6T1:12
 
@@ -116,29 +117,39 @@ def create_app():
             input_artist = input_artist.replace("_"," ")
         name = input_artist
 
-
-        ##### This is from LEARN SPOTIFY 6
         # Search of the artist
-        
-        # Get search results
-        searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])# from LEARN SPOTIFY vid 5 5:05 added limit=10, offset=0
-        print(simplejson.dumps(searchResults, sort_keys=True, indent=4))
-        results = simplejson.dumps(searchResults, sort_keys=True, indent=4) #V6T1:12
-
+        searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])
         artist = searchResults['artists']['items'][0]
-        print(artist['name'])
-        print(str(artist['followers']['total']) + " followers")
-        print(artist['genres'][0])
-        print(artist['images'][0]['url'])
-        print()
-        result_string = '''
-        {
-            artist : artist['name'],
-            followers : artist['followers']['total'],
-            genres : artist['genres'][0],
-            coverart : artist['images'][0]['url']
-        }
-        '''
+        artistID = artist['id']
+        ##### This is from LEARN SPOTIFY 7
+
+        # Album and track details
+        trackURIs = []
+        trackArt = []
+        z = 0
+
+        # Extract album data
+        albumResults = spotify.artist_albums(artistID)
+        albumResults = albumResults['items']
+
+        for item in albumResults:
+            print("ALBUM " + item['name'])
+            albumID = item['id']
+            albumArt = item['images'][0]['url']
+
+            # Extract track data
+            trackResults = spotify.album_tracks(albumID)
+            trackResults = trackResults['items']
+
+            for item in trackResults:
+                print(str(z) + ": " + item['name'])
+                trackURIs.append(item['uri'])
+                trackArt.append(albumArt)
+                z+=1
+            print()
+        
+        result_string = str(list(zip(trackURIs, trackArt)))
+
         return result_string
         # return track
         # return results # this works
