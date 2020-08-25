@@ -8,5 +8,5 @@ pipenv install python-dotenv
 pipenv install plotly
 
 # to Run flask app
-export FLASK_APP=spotify.py
+export FLASK_APP=beats:APP
 flask run
