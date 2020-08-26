@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from json.decoder import JSONDecodeError
 import json as simplejson
 from flask_cors import CORS
+from .db_model import db, Song, History
 
 
 from .spotify import search_artist_info, search_track_info, get_album_list, pull_features
@@ -23,14 +24,20 @@ def create_app():
     '''Create and configure an instance of the Flask application'''
 
     app = Flask(__name__)
+    app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    db.init_app(app)
     CORS(app)
 
     # TODO test this #############################################################################################################################
     @app.route('/songfeatures')
     def sf():
-        # TODO user gives us song
-        user_input_song = user_input_song or request.form['user_input_song']
-        results = search_track_info(user_input_song)
+        # TODO user gives us song 
+        user_input_fav_song = "Thriller"
+        # Hard Coded
+
+        user_input_fav_song = user_input_fav_song or request.form['user_input_fav_song']
+        results = search_track_info(user_input_fav_song)
         
         song_id = results['tracks']['items'][0]['id'] # song_id = '6KbQ3uYMLKb5jDxLF7wYDD'
         
@@ -38,21 +45,32 @@ def create_app():
 
         print(simplejson.dumps(track_features, sort_keys=True, indent=4))
         #using this for ML model
-        return str(track_features)
+
+        # have to return these values to the model
+        #Features I use in my NN model: ['danceability',  'instrumentalness', 'loudness', 'speechiness',  'valence']
+        # TODO separate this into str(track_features[0]['danceability'])
+        return str(track_features[0])
 
 
     @app.route('/songsuggester')
     def feedmodel():
-        # User inputs song name here
-        user_input_song = request.form['user_input_song']
-
-        # search db for song features
-        # twitoff app.py line 30
-        ssresult = Song.query(Song.name == user_input_song).one() #### for spotifyxxx.py 
-        # NOTE ssresult this is a list       
-        
-        return ssresults # this should break into name and features
-
+        db.create_all()
+        results = []
+        song_list = ['6llUzeoGSQ53W3ThFbReE2',
+                     '22mLKFanGy1bEb0qWuvMV0',
+                     '0psB5QzGb4653K0uaPgEyh',
+                     '3R6GxZEzCWDNnwo8QWeOw6']
+                     #Young and Fine,Suck My Kiss, Suck My Kiss, Waiting for Somebody
+        for song in song_list:
+           
+            # search db for song features
+            ssresults = Song.query.get(song)
+            ssresults = str(ssresults) 
+            # NOTE ssresult this is a list
+            print(ssresults)       
+            results.append(ssresults)
+        # return str(results) 
+        return render_template('home.html', results=results)
     
 
 
