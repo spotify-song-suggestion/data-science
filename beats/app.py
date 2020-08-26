@@ -14,7 +14,7 @@ import json as simplejson
 from flask_cors import CORS
 
 
-from .spotify import search_artist_info, search_track_info, get_album_list
+from .spotify import search_artist_info, search_track_info, get_album_list, pull_features
 # our json friend
 #print(json.dumps(VARIABLE, sort_keys=True, indent=4))
 
@@ -25,20 +25,21 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
 
-
+    # TODO test this #############################################################################################################################
     @app.route('/songfeatures')
     def sf():
         # TODO user gives us song
-        # TODO see output()
-        # TODO find song and songid
-        #using this for ML model
-        song_id = results['tracks']['items'][0]['id']
-        # TODO pass id to track features
-        track_features = spotify.audio_features('6KbQ3uYMLKb5jDxLF7wYDD')
+        user_input_song = user_input_song or request.form['user_input_song']
+        results = search_track_info(user_input_song)
         
+        song_id = results['tracks']['items'][0]['id'] # song_id = '6KbQ3uYMLKb5jDxLF7wYDD'
+        
+        track_features = pull_features(song_id)
+
         print(simplejson.dumps(track_features, sort_keys=True, indent=4))
-        
+        #using this for ML model
         return str(track_features)
+
 
     @app.route('/songsuggester')
     def feedmodel():
@@ -53,6 +54,9 @@ def create_app():
         return ssresults # this should break into name and features
 
     
+
+
+
 
 
     @app.route('/hello')

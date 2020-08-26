@@ -69,3 +69,11 @@ def get_album_list(name):
     artistID = artist['id']
     albumResults = spotify.artist_albums(artistID)#### for spotifyxxx.py
     return albumResults
+
+
+
+
+# TODO check this
+def pull_features(song_id):
+    track_features = spotify.audio_features(song_id)
+    return track_features
