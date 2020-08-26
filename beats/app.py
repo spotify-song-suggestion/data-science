@@ -106,46 +106,17 @@ def create_app():
     def output(user_input_song=None):
         # User inputs song name here 
         user_input_song = user_input_song or request.form['user_input_song']
-
+        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
         # spotify search params
         results = spotify.search(str(user_input_song), type="track", limit=1) #### for spotifyxxx.py
         return results
    
 
 
-    @app.route('/getsongs', methods=['POST'])
-    @app.route('/songsbyartist/<input_artist>', methods=['GET'])
+    @app.route('/getsongs')
+    @app.route('/albums/<input_artist>', methods=['GET'])
     def albumlist(input_artist=None):
-        '''
-        this route returns a list of all tracks of a artist
-        
-        # the Following code to make sense of the JSON file
-        # Album and track details
-        trackNames = []
-        trackURIs = []
-        trackArt = []
-        z = 0
 
-        # Extract album data
-        albumResults = spotify.artist_albums(artistID)
-        albumResults = albumResults['items']
-
-        for item in albumResults:
-            print("ALBUM " + item['name'])
-            albumID = item['id']
-            albumArt = item['images'][0]['url']
-            # Extract track data
-            trackResults = spotify.album_tracks(albumID)
-            trackResults = trackResults['items']
-            for item in trackResults:
-                print(str(z) + ": " + item['name'])
-                trackNames.append(item['name'])
-                trackURIs.append(item['uri'])
-                trackArt.append(albumArt)
-                z+=1
-            print()
-        
-        '''
         input_artist = input_artist or request.values['input_artist']
         spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials()) #### for spotifyxxx.py
         if input_artist == "":
@@ -160,7 +131,7 @@ def create_app():
         artistID = artist['id']
         albumResults = spotify.artist_albums(artistID)#### for spotifyxxx.py
 
-        return albumResults
+        return str(albumResults)
 
 
     @app.route('/songsuggester')
