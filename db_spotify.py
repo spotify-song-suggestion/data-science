@@ -105,33 +105,3 @@ def update():
 
 
 """reset route for song sqlite3 DB"""
-
-@app.route('/reset')
-def reset():
-    db.drop_all()
-    db.create_all()
-    con = sqlite3.connect('song.sqlite3')
-    df = pd.read_csv('csv/data.csv')
-    df.to_sql('song', con, if_exists='append', index=False)
-    return 'Database has been reset'
-
-# TODO: MACHINE LEARNING MODEL FILL - EXAMPLE FROM TWITOFF
-# @app.route('/suggest', methods=['POST'])
-# def compare(message=''):
-#     user1  = request.values['user1']
-#     user2  = request.values['user2']
-#     tweet_text = request.values['tweet_text']
-
-#     if user1 == user2:
-#         message = 'Cannot compare a user to themselves'
-#     else:
-#         prediction = predict_user(user1, user2, tweet_text)
-#         # message = '"{}" is more likely to be said \nby @{} than @{}'.format(
-#         #     tweet_text, user1 if prediction else user2, user2 if prediction else user1
-#         # )
-#         message = '@{}  is most likely to say "{}" than @{}'.format(
-#             user1 if prediction else user2, tweet_text, user2 if prediction else user1)
-#     # return render_template('prediction.html', 
-#                               title='Prediction', 
-#                               message=message)
-#     return render_template('base.html', title='Prediction', message=message, users=User.query.all())

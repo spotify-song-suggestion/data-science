@@ -19,7 +19,7 @@ import json as simplejson
 #print(json.dumps(VARIABLE, sort_keys=True, indent=4))
 
 
-
+#### TODO wrapping this in spotifyxxx.py
 load_dotenv()
 
 # wrap this in a function
@@ -32,6 +32,9 @@ credentials = SpotifyClientCredentials(client_id=client_id, client_secret=client
 
 token = credentials.get_access_token()
 spotify = spotipy.Spotify(auth=token)
+##################
+
+
 
 def create_app():
     '''Create and configure an instance of the Flask application'''
@@ -40,6 +43,17 @@ def create_app():
     # app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
     # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     # db.init_app(app)
+
+    @app.route('/songfeatures')
+    def sf():
+        '''
+        SELECT * FROM song
+        WHERE id = '6KbQ3uYMLKb5jDxLF7wYDD'
+        '''
+        # TODO get name of song and return id
+        track_features = spotify.audio_features('6KbQ3uYMLKb5jDxLF7wYDD')
+        print(simplejson.dumps(track_features, sort_keys=True, indent=4))
+        return str(track_features)
 
     @app.route('/hello')
     def hello_world():
@@ -58,8 +72,8 @@ def create_app():
         return render_template('asksong.html')
 
      
-    @app.route('/artistinfo')
-    @app.route('/artist/<input_artist>')
+    @app.route('/artistinfo', methods=['GET'])
+    @app.route('/artist/<input_artist>', methods=['GET'])
     def getartist(input_artist=None):
         '''
         this route returns more info about an artist
@@ -68,7 +82,8 @@ def create_app():
         # print(artist['genres'][0])
         # print(artist['images'][0]['url'])
         '''
-        input_artist = request.values['input_artist']
+    
+        input_artist = input_artist or request.values['input_artist']
         spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
         if input_artist == "":
             return "Can't Touch This! Hammer Time!"
@@ -77,7 +92,7 @@ def create_app():
         name = input_artist
 
         # Search of the artist
-        searchResults = spotify.search(q='artist:' + name, limit=2, offset=0, type=['artist'])
+        searchResults = spotify.search(q='artist:' + name, limit=2, offset=0, type=['artist']) #### for spotifyxxx.py
         artist = searchResults['artists']['items'][0]
 
         print(simplejson.dumps(searchResults, sort_keys=True, indent=4)) # full json
@@ -87,20 +102,20 @@ def create_app():
 
 
     @app.route('/songinfo', methods=['POST']) #/output changed to songinfo
-    @app.route('/track/<input_song>', methods=['POST'])
-    def output():
+    @app.route('/track/<user_input_song>', methods=['GET'])
+    def output(user_input_song=None):
         # User inputs song name here 
-        user_input_song = request.form['user_input_song']
+        user_input_song = user_input_song or request.form['user_input_song']
 
         # spotify search params
-        results = spotify.search(str(user_input_song), type="track", limit=1)
+        results = spotify.search(str(user_input_song), type="track", limit=1) #### for spotifyxxx.py
         return results
    
 
 
-    @app.route('/getsongs')
-    @app.route('/songsbyartist/<input_artist>')
-    def getsonginfo(input_artist=None):
+    @app.route('/getsongs', methods=['POST'])
+    @app.route('/songsbyartist/<input_artist>', methods=['GET'])
+    def albumlist(input_artist=None):
         '''
         this route returns a list of all tracks of a artist
         
@@ -131,8 +146,8 @@ def create_app():
             print()
         
         '''
-        input_artist = request.values['input_artist']
-        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+        input_artist = input_artist or request.values['input_artist']
+        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials()) #### for spotifyxxx.py
         if input_artist == "":
             return "Can't Touch This! Hammer Time!"
         if "_" in input_artist:
@@ -140,10 +155,10 @@ def create_app():
         name = input_artist
 
         # Search of the artist
-        searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])
+        searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])#### for spotifyxxx.py
         artist = searchResults['artists']['items'][0]
         artistID = artist['id']
-        albumResults = spotify.artist_albums(artistID)
+        albumResults = spotify.artist_albums(artistID)#### for spotifyxxx.py
 
         return albumResults
 
@@ -155,7 +170,7 @@ def create_app():
 
         # search db for song features
         # twitoff app.py line 30
-        ssresult = Song.query(Song.name == user_input_song).one() 
+        ssresult = Song.query(Song.name == user_input_song).one() #### for spotifyxxx.py 
         # NOTE ssresult this is a list       
         
         return ssresults # this should break into name and features
