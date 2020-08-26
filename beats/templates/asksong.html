@@ -6,7 +6,7 @@
         <br>
         <br>
         <h2>Enter Artist name for more Artist Information</h2>
-        <form  action="/artistinfo">
+        <form  action="/artistinfo" method="POST">
             Artist Name : <input type="text" name="input_artist" placeholder="Enter Artist">
             <input type="submit">
         </form>
@@ -14,7 +14,7 @@
             Song Name : <input type="text" name="user_input_song" placeholder="Enter Song Title">
             <input type="submit">
         </form>
-        <form action="/getsongs">
+        <form action="/getsongs" method="POST">
             Get All Tracks of An Artist : <input type="text" name="input_artist"  placeholder="Enter Artist Name">
             <input type="submit">
         </form>
