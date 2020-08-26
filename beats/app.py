@@ -87,6 +87,7 @@ def create_app():
 
 
     @app.route('/songinfo', methods=['POST']) #/output changed to songinfo
+    @app.route('/track/<input_song>', methods=['POST'])
     def output():
         # User inputs song name here 
         user_input_song = request.form['user_input_song']
@@ -98,7 +99,7 @@ def create_app():
 
 
     @app.route('/getsongs')
-    @app.route('/getsongsbyartist/<input_artist>')
+    @app.route('/songsbyartist/<input_artist>')
     def getsonginfo(input_artist=None):
         '''
         this route returns a list of all tracks of a artist
