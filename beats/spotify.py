@@ -41,10 +41,31 @@ market = ["us"]
 
 client_id = getenv('SPOTIPY_CLIENT_ID')
 client_secret = getenv('SPOTIPY_CLIENT_SECRET')
-
 credentials = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
-
 token = credentials.get_access_token()
 spotify = spotipy.Spotify(auth=token)
+spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+
+def search_artist_info(name):
+    '''
+    this route returns more info about an artist
+    # print(artist['name'])
+    # print(str(artist['followers']['total']) + " followers")
+    # print(artist['genres'][0])
+    # print(artist['images'][0]['url'])
+    '''
+    searchResults = spotify.search(q='artist:' + name, limit=2, offset=0, type=['artist']) #### for spotifyxxx.py
+    return searchResults
 
 
+def search_track_info(user_input_song):   
+    results = spotify.search(str(user_input_song), type="track", limit=1) #### for spotifyxxx.py
+    return results
+
+def get_album_list(name):
+    searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])#### for spotifyxxx.py
+
+    artist = searchResults['artists']['items'][0]
+    artistID = artist['id']
+    albumResults = spotify.artist_albums(artistID)#### for spotifyxxx.py
+    return albumResults

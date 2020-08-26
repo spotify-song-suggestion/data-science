@@ -1,8 +1,4 @@
-# https://spotipy.readthedocs.io/en/2.13.0/
-# pip install spotipy --upgrade
-# pipenv install python-dotenv
-# pipenv install simplejson
-# pipenv install  flask-cors
+
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import sys
@@ -17,25 +13,10 @@ from json.decoder import JSONDecodeError
 import json as simplejson
 from flask_cors import CORS
 
+
+from .spotify import search_artist_info, search_track_info, get_album_list
 # our json friend
 #print(json.dumps(VARIABLE, sort_keys=True, indent=4))
-
-
-#### TODO wrapping this in spotifyxxx.py
-load_dotenv()
-
-# wrap this in a function
-market = ["us"]
-
-client_id = getenv('SPOTIPY_CLIENT_ID')
-client_secret = getenv('SPOTIPY_CLIENT_SECRET')
-
-credentials = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
-
-token = credentials.get_access_token()
-spotify = spotipy.Spotify(auth=token)
-##################
-
 
 
 def create_app():
@@ -43,9 +24,7 @@ def create_app():
 
     app = Flask(__name__)
     CORS(app)
-    # app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
-    # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    # db.init_app(app)
+
 
     @app.route('/songfeatures')
     def sf():
@@ -96,16 +75,8 @@ def create_app():
     @app.route('/artistinfo', methods=['GET'])
     @app.route('/artist/<input_artist>', methods=['GET'])
     def getartist(input_artist=None):
-        '''
-        this route returns more info about an artist
-        # print(artist['name'])
-        # print(str(artist['followers']['total']) + " followers")
-        # print(artist['genres'][0])
-        # print(artist['images'][0]['url'])
-        '''
     
         input_artist = input_artist or request.values['input_artist']
-        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
         if input_artist == "":
             return "Can't Touch This! Hammer Time!"
         if "_" in input_artist:
@@ -113,7 +84,7 @@ def create_app():
         name = input_artist
 
         # Search of the artist
-        searchResults = spotify.search(q='artist:' + name, limit=2, offset=0, type=['artist']) #### for spotifyxxx.py
+        searchResults = search_artist_info(name)
         artist = searchResults['artists']['items'][0]
 
         print(simplejson.dumps(searchResults, sort_keys=True, indent=4)) # full json
@@ -127,25 +98,18 @@ def create_app():
     def output(user_input_song=None):
         # User inputs song name here 
         user_input_song = user_input_song or request.form['user_input_song']
-        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
-        # spotify search params
-        results = spotify.search(str(user_input_song), type="track", limit=1) #### for spotifyxxx.py
-        
-        
-        #using this for ML model
-        song_id = results['tracks']['items'][0]['id']
+        results = search_track_info(user_input_song)
+
         # this helps you fish threw a json 
         # print(simplejson.dumps(results['tracks']['items'][0]['id'], sort_keys=True, indent=4))
         return results
    
-
 
     @app.route('/getsongs')
     @app.route('/albums/<input_artist>', methods=['GET'])
     def albumlist(input_artist=None):
 
         input_artist = input_artist or request.values['input_artist']
-        spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials()) #### for spotifyxxx.py
         if input_artist == "":
             return "Can't Touch This! Hammer Time!"
         if "_" in input_artist:
@@ -153,14 +117,8 @@ def create_app():
         name = input_artist
 
         # Search of the artist
-        searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])#### for spotifyxxx.py
-        artist = searchResults['artists']['items'][0]
-        artistID = artist['id']
-        albumResults = spotify.artist_albums(artistID)#### for spotifyxxx.py
-
+        albumResults = get_album_list(name)
         return str(albumResults)
-
-
 
 
     return app
