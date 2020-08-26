@@ -49,14 +49,32 @@ def create_app():
 
     @app.route('/songfeatures')
     def sf():
-        '''
-        SELECT * FROM song
-        WHERE id = '6KbQ3uYMLKb5jDxLF7wYDD'
-        '''
-        # TODO get name of song and return id
+        # TODO user gives us song
+        # TODO see output()
+        # TODO find song and songid
+        #using this for ML model
+        song_id = results['tracks']['items'][0]['id']
+        # TODO pass id to track features
         track_features = spotify.audio_features('6KbQ3uYMLKb5jDxLF7wYDD')
+        
         print(simplejson.dumps(track_features, sort_keys=True, indent=4))
+        
         return str(track_features)
+
+    @app.route('/songsuggester')
+    def feedmodel():
+        # User inputs song name here
+        user_input_song = request.form['user_input_song']
+
+        # search db for song features
+        # twitoff app.py line 30
+        ssresult = Song.query(Song.name == user_input_song).one() #### for spotifyxxx.py 
+        # NOTE ssresult this is a list       
+        
+        return ssresults # this should break into name and features
+
+    
+
 
     @app.route('/hello')
     def hello_world():
@@ -112,6 +130,12 @@ def create_app():
         spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
         # spotify search params
         results = spotify.search(str(user_input_song), type="track", limit=1) #### for spotifyxxx.py
+        
+        
+        #using this for ML model
+        song_id = results['tracks']['items'][0]['id']
+        # this helps you fish threw a json 
+        # print(simplejson.dumps(results['tracks']['items'][0]['id'], sort_keys=True, indent=4))
         return results
    
 
@@ -137,17 +161,6 @@ def create_app():
         return str(albumResults)
 
 
-    @app.route('/songsuggester')
-    def feedmodel():
-        # User inputs song name here
-        user_input_song = request.form['user_input_song']
-
-        # search db for song features
-        # twitoff app.py line 30
-        ssresult = Song.query(Song.name == user_input_song).one() #### for spotifyxxx.py 
-        # NOTE ssresult this is a list       
-        
-        return ssresults # this should break into name and features
 
 
     return app
