@@ -15,7 +15,7 @@ from flask_cors import CORS
 from .db_model import db, Song, History
 
 
-from .spotify import search_artist_info, search_track_info, get_album_list, pull_features
+from .spotify import search_artist_info, search_track_info, get_album_list, pull_features, plot_it
 # our json friend
 #print(json.dumps(VARIABLE, sort_keys=True, indent=4))
 
@@ -29,6 +29,10 @@ def create_app():
     db.init_app(app)
     CORS(app)
 
+
+    # TODO look where it is necessary to save new data to our database
+    # TODO have to setup PostgresDB
+    # TODO if song is not in database then pull from spotify api
     # TODO test this #############################################################################################################################
     @app.route('/songfeatures')
     def sf():
@@ -37,11 +41,11 @@ def create_app():
         # Hard Coded
 
         user_input_fav_song = user_input_fav_song or request.form['user_input_fav_song']
-        results = search_track_info(user_input_fav_song)
+        results = search_track_info(user_input_fav_song)# api call
         
         song_id = results['tracks']['items'][0]['id'] # song_id = '6KbQ3uYMLKb5jDxLF7wYDD'
         
-        track_features = pull_features(song_id)
+        track_features = pull_features(song_id) # api call
 
         print(simplejson.dumps(track_features, sort_keys=True, indent=4))
         #using this for ML model
@@ -70,8 +74,9 @@ def create_app():
             print(ssresults)       
             results.append(ssresults)
         # return str(results) 
-        return render_template('home.html', results=results)
-    
+        fig = plot_it()
+        # return render_template('home.html', results=results)
+        return fig
 
 
 
