@@ -2,6 +2,7 @@
 # pip install spotipy --upgrade
 # pipenv install python-dotenv
 # pipenv install simplejson
+# pipenv install  flask-cors
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import sys
@@ -14,6 +15,7 @@ from os import getenv
 from dotenv import load_dotenv
 from json.decoder import JSONDecodeError
 import json as simplejson
+from flask_cors import CORS
 
 # our json friend
 #print(json.dumps(VARIABLE, sort_keys=True, indent=4))
@@ -40,6 +42,7 @@ def create_app():
     '''Create and configure an instance of the Flask application'''
 
     app = Flask(__name__)
+    CORS(app)
     # app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
     # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     # db.init_app(app)

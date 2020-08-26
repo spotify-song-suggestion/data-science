@@ -16,6 +16,7 @@ plotly = "*"
 gunicorn = "*"
 psycopg2 = "*"
 simplejson = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.8"
