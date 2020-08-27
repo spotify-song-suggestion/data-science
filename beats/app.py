@@ -179,7 +179,7 @@ def create_app():
     def reset():
         db.drop_all()
         db.create_all()
-        return render_template('base.html', title='Database has been Reset!')
+        return render_template('home.html')
 
 
     return app
