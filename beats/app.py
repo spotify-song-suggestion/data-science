@@ -29,8 +29,8 @@ def create_app():
     app = Flask(__name__)
 
     # TODO switch to PostgreDB
-    app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
-    #app.config["SQLALCHEMY_DATABASE_URI"] = getenv("SQLITE3_URL")
+    #app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
+    app.config["SQLALCHEMY_DATABASE_URI"] = getenv("SQLITE3_URL")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
     
@@ -173,8 +173,8 @@ def create_app():
     @app.route('/reset')
     def reset():
         db.drop_all()
-        #db.create_all()
-        create_tables()
+        db.create_all()
+        #create_tables()
         return render_template('home.html')
 
 
