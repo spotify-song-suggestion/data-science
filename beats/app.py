@@ -36,7 +36,8 @@ def create_app():
     db.init_app(app)
     CORS(app)
     # TODO add DS ML model
-    filename = 'beats\\testing_model.sav'
+    filename = 'beats/testing_model.sav'
+    # filename = 'beats\\testing_model.sav'
     loaded_model = pickle.load(open(filename, 'rb'))
 
     # TODO look where it is necessary to save new data to our database
