@@ -20,7 +20,7 @@ from sklearn.neighbors import NearestNeighbors
 # functions for encapsulation and reabability
 from .spotify import search_artist_info, search_track_info, get_album_list, pull_features, plot_radar_one
 from .suggest import find_recommended_songs
-from .etl_postgres import create_tables
+# from .etl_postgres import create_tables
 
 
 
@@ -32,14 +32,21 @@ def create_app():
     #app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
     app.config["SQLALCHEMY_DATABASE_URI"] = getenv("SQLITE3_URL")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    db.init_app(app)
-    
+    db.init_app(app)    
     CORS(app)
-
     
     filename = 'beats/testing_model.sav'
     # filename = 'beats\\testing_model.sav'
     loaded_model = pickle.load(open(filename, 'rb'))
+
+
+    @app.route('/reset')
+    def reset():
+        db.drop_all()
+        # db.create_all()
+        #create_tables()
+        return render_template('home.html')
+
 
     # TODO look where it is necessary to save new data to our database
     # TODO reset route and load data route have to setup PostgresDB
@@ -81,7 +88,8 @@ def create_app():
 
     @app.route('/songsuggester', methods=["GET"])
     def feedmodel():
-        db.create_all()
+        # TODO
+        # db.create_all()
 
         audio_features = sf()
 
@@ -170,12 +178,7 @@ def create_app():
         albumResults = get_album_list(name)
         return str(albumResults)
 
-    @app.route('/reset')
-    def reset():
-        db.drop_all()
-        # db.create_all()
-        #create_tables()
-        return render_template('home.html')
+
 
 
     return app
