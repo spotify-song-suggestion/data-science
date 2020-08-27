@@ -15,9 +15,13 @@ from flask_cors import CORS
 from .db_model import db, Song, History
 import plotly.graph_objects as go
 import plotly
+# DS ML model
+import pickle
+from sklearn.neighbors import NearestNeighbors
 
 
 from .spotify import search_artist_info, search_track_info, get_album_list, pull_features, plot_radar_one
+from .suggest import find_recommended_songs
 # our json friend
 #print(json.dumps(VARIABLE, sort_keys=True, indent=4))
 
@@ -30,7 +34,9 @@ def create_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
     CORS(app)
-
+    # TODO add DS ML model
+    filename = 'beats\\testing_model.sav'
+    loaded_model = pickle.load(open(filename, 'rb'))
 
     # TODO look where it is necessary to save new data to our database
     # TODO have to setup PostgresDB
@@ -81,23 +87,37 @@ def create_app():
         'duration_ms': 358053, 
         'time_signature': 4}
         '''
-        y = fav_five
-        x = ['danceability',  'instrumentalness', 'loudness', 'speechiness',  'valence']
-        fig = plot_radar_one(x,y)
+        # y = pd.Series(fav_five)
+
+        # model_input  = [features_nums] 
+        # df_new = pd.DataFrame(model_input, columns= wanted_features)
+        # series = df_new.iloc[0, 0:].to_numpy() # audio 
+        y = [fav_five]
+        x = ['danceability',  'instrumentalness', 'loudness', 'speechiness',  'valence'] # Series
+        df_new = pd.DataFrame(y, columns= x)
+        audio_features = df_new.iloc[0, 0:].to_numpy() 
+
+        # fig = plot_radar_one(x,y)
+        print(type(y))
         
-        # return str(fav_five) # this is return for DS ML model
-        return fig
+        return audio_features # this is return for DS ML model
+        # return fig
 
 
     @app.route('/songsuggester')
     def feedmodel():
         db.create_all()
-        results = []
-        song_list = ['6llUzeoGSQ53W3ThFbReE2',
-                     '22mLKFanGy1bEb0qWuvMV0',
-                     '0psB5QzGb4653K0uaPgEyh',
-                     '3R6GxZEzCWDNnwo8QWeOw6']
+
+        # audio_features =sf()
+        audio_features = np.array([  0.708 ,   0.563 , -12.428 ,   0.0506,   0.779 ])
+        song_list = find_recommended_songs(audio_features)
+        
+        # song_list = ['6llUzeoGSQ53W3ThFbReE2',
+        #              '22mLKFanGy1bEb0qWuvMV0',
+        #              '0psB5QzGb4653K0uaPgEyh',
+        #              '3R6GxZEzCWDNnwo8QWeOw6']
                      #Young and Fine,Suck My Kiss, Suck My Kiss, Waiting for Somebody
+        results = []
         for song in song_list:
            
             # search db for song features
