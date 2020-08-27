@@ -6,14 +6,13 @@
   </head>
   <body>
     <nav>
-      <a href="/" class="brand"><span>Best Beats : Spotify Song Suggestion</span></a>
-
+      <a href="/" class="brand"><span>Best Beats - Gotta Rock It Don't Stop It</span></a>
       <!-- responsive-->
       <input id="bmenub" type="checkbox" class="show">
       <label for="bmenub" class="burger pseudo button">Menu</label>
 
       <div class="menu">
-        <a href="/update" class="button warning">New Suggestion Playlist</a>
+        <a href="/" class="button warning">Refresh Page</a>
       </div>
     </nav>
 
@@ -21,68 +20,44 @@
       {% block content %}
       <div>
         <h1>Best Beats : Spotify Song Suggester</h1>
-        <p>Please Select 5 of Your Favorite Songs:</p>
-        <form action="/compare" method="post">
-          <select name="user1">
-            {% for user in users %}
-            <option value="{{ user.username }}">@{{ user.username }}</option>
-            {% endfor %}
-          </select>
-          <select name="user2">
-            {% for user in users %}
-            <option value="{{ user.username }}">@{{ user.username }}</option>
-            {% endfor %}
-          </select>
-          <select name="user3">
-            {% for user in users %}
-            <option value="{{ user.username }}">@{{ user.username }}</option>
-            {% endfor %}
-          </select>
-          <select name="user4">
-            {% for user in users %}
-            <option value="{{ user.username }}">@{{ user.username }}</option>
-            {% endfor %}
-          </select>
-          <select name="user5">
-            {% for user in users %}
-            <option value="{{ user.username }}">@{{ user.username }}</option>
-            {% endfor %}
-          </select>
-          <input type="text" name="tweet_text" placeholder="This is just a Demo Page more to come.">
+        <h2>Our Spotify Song Suggester is an intelligent algorithm that enables users to create awesome playlists based on a song.</h2>
+        <br>
+        <h2> Get the playlist of your dreams based on a song.</h2>
+        
+        <form action="/songsuggester" method="get">
+
+          <input type="text" name="tweet_text" placeholder="Enter Your Favorite Song Here.">
           
-          <input type="submit" value="Clear Songs">
+          <input type="submit" value="Make Suggested Playlist">
         </form>
       </div>
       <div>
-        <h2>Please Enter an Artist - for more artist info</h2>
+        <h1>Best Beats : json Library</h1>
+        <h3>Please Enter an Artist - for more artist info</h3>
         <form action="/artistinfo">
           <input type="text" name="input_artist" placeholder="Enter Artist Name">
           <input type="submit">
         </form>
-        <br>
-        <h2>Please Enter a Song - for more info on track</h2>
+        <h3>Please Enter a Song - for more info on track</h3>
         <form  action="/songinfo" method="POST">
           <input type="text" name="user_input_song" placeholder="Enter Song Name">
           <input type="submit">
         </form>
-        <br>
-        <h2>Get More songs from your favorite Artist</h2>
+        <h3>Get More songs from your favorite Artist</h3>
         <form action="/getsongs">
           <input type="text" name="input_artist" placeholder="Get Up to 10 Tracks of Your Favorite Artist">
           <input type="submit">
         </form>
       </div>
       <div id="prediction">
-        <h2>Results</h2>
+        <h2>Suggested Song List just for you</h2>
         <br>
         {% for result in results %}
         <span class="stack"><li>{{ result }}</li></span>
         {% endfor %}
+
         <br>
-        <h3>This is the list of results from Query</h3>
-        <p>{{ results }}</p>
-        <br>
-        <a href="/" class="button warning">Try Another Prediction</a>
+        <a href="/" class="button warning">Clear Suggested Playlist</a>
         <p><div id="footer">
           <hr>
           &copy; Copyright 2020      Jeffrey Asuncion |

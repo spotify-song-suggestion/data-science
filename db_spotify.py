@@ -1,13 +1,6 @@
 """Spotify Suggested Playlist Dashboard with Flask."""
-from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
-import sqlite3
-import pandas as pd
 
-
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///song.sqlite3'
 db = SQLAlchemy(app)
 
 
