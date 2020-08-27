@@ -53,3 +53,7 @@ create etl route
  pip freeze > requirement.txt
 
 # must be requirements.txt not the above output
+
+# what is a CORS Error 
+we fixed it with 3 lines of CORS code
+CORS error 

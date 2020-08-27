@@ -1,4 +1,3 @@
-
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import sys
@@ -18,33 +17,31 @@ import plotly
 # DS ML model
 import pickle
 from sklearn.neighbors import NearestNeighbors
-
-
+# functions for encapsulation and reabability
 from .spotify import search_artist_info, search_track_info, get_album_list, pull_features, plot_radar_one
 from .suggest import find_recommended_songs
-# our json friend
-#print(json.dumps(VARIABLE, sort_keys=True, indent=4))
+
 
 
 def create_app():
     '''Create and configure an instance of the Flask application'''
-
     app = Flask(__name__)
+
+    # TODO switch to PostgreDB
     # app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
     app.config["SQLALCHEMY_DATABASE_URI"] = getenv("SQLITE3_URL")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
     CORS(app)
-    # TODO add DS ML model
+
+    
     filename = 'beats/testing_model.sav'
     # filename = 'beats\\testing_model.sav'
     loaded_model = pickle.load(open(filename, 'rb'))
 
     # TODO look where it is necessary to save new data to our database
-    # TODO have to setup PostgresDB
-    # TODO reset route
+    # TODO reset route and load data route have to setup PostgresDB
     # TODO if song is not in database then pull from spotify api
-    # TODO test this #############################################################################################################################
     @app.route('/songfeatures')
     def sf(user_input_fav_song=None):
         # TODO user gives us song 
@@ -78,11 +75,6 @@ def create_app():
         audio_features = df_new.iloc[0, 0:].to_numpy() 
 
         return audio_features # this is return for DS ML model
-
-
-
-
-
 
 
     @app.route('/songsuggester', methods=["GET"])
@@ -143,7 +135,6 @@ def create_app():
         print(simplejson.dumps(searchResults, sort_keys=True, indent=4)) # full json
         print(simplejson.dumps(artist, sort_keys=True, indent=4)) # short version
         return artist
-
 
 
     @app.route('/songinfo', methods=['POST']) #/output changed to songinfo
