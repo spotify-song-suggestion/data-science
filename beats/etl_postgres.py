@@ -26,7 +26,9 @@ cursor = connection.cursor()
 
 def create_tables():
     create_query = """
-        CREATE TABLE song (acousticness NUMERIC, 
+        DROP TABLE IF EXISTS song; -- allows this to be run idempotently, avoids psycopg2.error
+        CREATE TABLE IF NOT EXISTS song (
+                           acousticness NUMERIC, 
                            artists TEXT, 
                            danceability NUMERIC, 
                            duration_ms NUMERIC, 
