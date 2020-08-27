@@ -54,17 +54,11 @@ def create_app():
             user_input_fav_song = user_input_fav_song.replace("_"," ")
         
 
-
-
-
-
-        # user_input_fav_song = user_input_fav_song or request.values['user_input_fav_song']
-
         results = search_track_info(user_input_fav_song)# api call
 
         song_id = results['tracks']['items'][0]['id'] # song_id = '6KbQ3uYMLKb5jDxLF7wYDD'
         
-        track_features = pull_features(song_id) # api call
+        track_features = pull_features(song_id) 
         # To help visualize the json file
         # print(simplejson.dumps(track_features, sort_keys=True, indent=4))
         
@@ -97,8 +91,7 @@ def create_app():
         song_list = find_recommended_songs(audio_features)
         
         results = []
-        for song in song_list:
-           
+        for song in song_list: 
             # search db for song features
             ssresults = Song.query.get(song)
             ssresults = str(ssresults) 
@@ -114,9 +107,11 @@ def create_app():
     def hello_world():
         return 'Hello from DSPT5 and DSPT6 Lambda School 2020'
 
+
     @app.route('/')
     def index():
         return render_template('home.html')
+
 
     @app.route('/song')
     def getsong():
@@ -159,10 +154,8 @@ def create_app():
             return render_template('home.html')
         if "_" in user_input_song:
             user_input_song = user_input_song.replace("_"," ")
-        
 
         results = search_track_info(user_input_song)
-
         return results
    
 
