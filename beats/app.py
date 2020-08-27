@@ -20,6 +20,7 @@ from sklearn.neighbors import NearestNeighbors
 # functions for encapsulation and reabability
 from .spotify import search_artist_info, search_track_info, get_album_list, pull_features, plot_radar_one
 from .suggest import find_recommended_songs
+from .etl_postgres import create_tables
 
 
 
@@ -28,10 +29,11 @@ def create_app():
     app = Flask(__name__)
 
     # TODO switch to PostgreDB
-    # app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
-    app.config["SQLALCHEMY_DATABASE_URI"] = getenv("SQLITE3_URL")
+    app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
+    #app.config["SQLALCHEMY_DATABASE_URI"] = getenv("SQLITE3_URL")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
+    
     CORS(app)
 
     
@@ -171,7 +173,8 @@ def create_app():
     @app.route('/reset')
     def reset():
         db.drop_all()
-        db.create_all()
+        #db.create_all()
+        create_tables()
         return render_template('home.html')
 
 
