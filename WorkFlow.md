@@ -16,3 +16,28 @@
 
 >>> Song.query.get('6llUzeoGSQ53W3ThFbReE2')
 < Title  'Young and Fine' - Artist  "['Weather Report']" - Duration(ms) 413587.0 - A - 0.725 - D  0.371 - I 0.000139 - L -9.952 - S 0.0488 - V 0.6729999999999999 >
+
+
+
+heroku adding postgre db
+
+heroku dashboard
+overview
+configure add-ons
+Add-ons - find box type Heroku Postgres
+Plan name Hobby Dev - Free
+click Provision
+
+or anaconda heroku cli
+ctrl c
+heroku addons:create heroku-postgresql:hobby-dev
+
+back to heroku dashboard
+click on heroku postgre - attached as database
+info how to connect to the heroku postgres
+limit 10,000 rows
+setting tab for db creds
+
+back to main dashboard 
+setting
+config vars - DATABASE_URL  postgres://????????? is there for app
