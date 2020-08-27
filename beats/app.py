@@ -37,7 +37,6 @@ def create_app():
     CORS(app)
     
     filename = 'beats/testing_model.sav'
-    # filename = 'beats\\testing_model.sav'
     loaded_model = pickle.load(open(filename, 'rb'))
 
     @app.route('/dummy')
@@ -46,13 +45,6 @@ def create_app():
         results = pull_features('6llUzeoGSQ53W3ThFbReE2')
         return str(results[0]['danceability'])
 
-    @app.route('/reset')
-    def reset():
-        db.drop_all()
-        db.create_all()
-        #create_tables()
-        # return render_template('home.html')
-        return "Can't Toucn This!!!"
 
 
     # TODO if song is not in database then pull from spotify api
@@ -191,8 +183,6 @@ def create_app():
         # Search of the artist
         albumResults = get_album_list(name)
         return str(albumResults)
-
-
 
 
     return app
