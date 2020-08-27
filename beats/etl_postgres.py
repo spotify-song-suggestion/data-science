@@ -16,7 +16,7 @@ DB_HOST = getenv("DB_HOST", default="OOPS")
 DB_NAME = getenv("DB_NAME", default="OOPS")
 DB_USER = getenv("DB_USER", default="OOPS")
 DB_PASS = getenv("DB_PASS", default="OOPS")
-
+DATABASE_URL = getenv("DATABASE_URL", default="OOPS")
 
 connection = psycopg2.connect(dbname=DB_NAME, 
                               user=DB_USER, 
@@ -50,7 +50,7 @@ def create_tables():
 
     df = pd.read_csv('csv/data.csv')
 
-    engine = create_engine('postgresql://scott:tiger@localhost:5432/mydatabase')
+    engine = create_engine(DATABASE_URL)
     df.to_sql('song', engine)
 
     connection.commit()
