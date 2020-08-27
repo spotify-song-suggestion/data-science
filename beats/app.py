@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from json.decoder import JSONDecodeError
 import json as simplejson
 from flask_cors import CORS
-from .db_model import db, Song, History
+# from .db_model import db, Song, History
 import plotly.graph_objects as go
 import plotly
 # DS ML model
@@ -32,24 +32,28 @@ def create_app():
     #app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
     app.config["SQLALCHEMY_DATABASE_URI"] = getenv("SQLITE3_URL")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    db.init_app(app)    
+    # db.init_app(app)    
     CORS(app)
     
     filename = 'beats/testing_model.sav'
     # filename = 'beats\\testing_model.sav'
     loaded_model = pickle.load(open(filename, 'rb'))
 
+    @app.route('/dummy')
+    def jepoy():
+        # dummy will help get track info
+        results = pull_features('6llUzeoGSQ53W3ThFbReE2')
+        return str(results[0]['danceability'])
 
     @app.route('/reset')
     def reset():
         db.drop_all()
-        # db.create_all()
+        db.create_all()
         #create_tables()
-        return render_template('home.html')
+        # return render_template('home.html')
+        return "Can't Toucn This!!!"
 
 
-    # TODO look where it is necessary to save new data to our database
-    # TODO reset route and load data route have to setup PostgresDB
     # TODO if song is not in database then pull from spotify api
     @app.route('/songfeatures')
     def sf(user_input_fav_song=None):
@@ -65,7 +69,7 @@ def create_app():
 
         results = search_track_info(user_input_fav_song)# api call
 
-        song_id = results['tracks']['items'][0]['id'] # song_id = '6KbQ3uYMLKb5jDxLF7wYDD'
+        song_id = results['tracks']['items'][0]['id'] 
         
         track_features = pull_features(song_id) 
         # To help visualize the json file
@@ -97,9 +101,18 @@ def create_app():
         
         results = []
         for song in song_list: 
-            # search db for song features
-            ssresults = Song.query.get(song)
-            ssresults = str(ssresults) 
+            # search api for song features
+            all_audio_features = pull_features(song)
+
+            danceability =  all_audio_features[0]['danceability']
+            instrumentalness = all_audio_features[0]['instrumentalness']
+            loadness = all_audio_features[0]['loudness']
+            speechiness = all_audio_features[0]['speechiness']
+            valance = all_audio_features[0]['valence']
+            
+            ssresults = [song, danceability, instrumentalness, loadness, speechiness, valance]
+             
+            # ssresults = str(ssresults) 
             # NOTE ssresult this is a list
             print(ssresults)       
             results.append(ssresults)

@@ -62,3 +62,6 @@ CORS error
 
 two changes sqlite closed
 open reset
+
+
+mission no database just hit api for all data

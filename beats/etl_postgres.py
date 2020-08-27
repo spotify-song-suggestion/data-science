@@ -52,8 +52,12 @@
 
 #     df = pd.read_csv('csv/data.csv')
 
-#     # engine = create_engine(DATABASE_URL)
-#     df.to_sql('song', connection, if_exists='append', index=False)
+#     engine = create_engine(DATABASE_URL)
+#     df.to_sql('song', engine, if_exists='append', index=False)
 
 #     connection.commit()
 
+
+# if __name__ == '__main__':
+#     create_tables()
+#     print("Got this!!!")
