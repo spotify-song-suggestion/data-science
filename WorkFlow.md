@@ -48,3 +48,6 @@ check twitoff reset route
 create etl route
 
 1:38:04
+
+# help stack overflow you're our only hope
+ pip freeze > requirement.txt
