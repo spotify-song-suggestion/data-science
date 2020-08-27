@@ -12,11 +12,11 @@ load_dotenv() # looks inside the .env file for some env vars
 
 
 # DONE TODO get from Heroku 
-DB_HOST = getenv("DB_HOST", default="OOPS")
-DB_NAME = getenv("DB_NAME", default="OOPS")
-DB_USER = getenv("DB_USER", default="OOPS")
-DB_PASS = getenv("DB_PASS", default="OOPS")
-DATABASE_URL = getenv("DATABASE_URL", default="OOPS")
+DB_HOST = getenv("DB_HOST")
+DB_NAME = getenv("DB_NAME")
+DB_USER = getenv("DB_USER")
+DB_PASS = getenv("DB_PASS")
+DATABASE_URL = getenv("DATABASE_URL")
 
 connection = psycopg2.connect(dbname=DB_NAME, 
                               user=DB_USER, 
@@ -52,8 +52,8 @@ def create_tables():
 
     df = pd.read_csv('csv/data.csv')
 
-    engine = create_engine(DATABASE_URL)
-    df.to_sql('song', engine)
+    # engine = create_engine(DATABASE_URL)
+    df.to_sql('song', connection, if_exists='append', index=False)
 
     connection.commit()
 
