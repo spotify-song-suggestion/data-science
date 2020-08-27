@@ -40,6 +40,7 @@ def create_app():
 
     # TODO look where it is necessary to save new data to our database
     # TODO have to setup PostgresDB
+    # TODO reset route
     # TODO if song is not in database then pull from spotify api
     # TODO test this #############################################################################################################################
     @app.route('/songfeatures')

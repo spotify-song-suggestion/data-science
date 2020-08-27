@@ -41,3 +41,10 @@ setting tab for db creds
 back to main dashboard 
 setting
 config vars - DATABASE_URL  postgres://????????? is there for app
+
+
+
+check twitoff reset route
+create etl route
+
+1:38:04
