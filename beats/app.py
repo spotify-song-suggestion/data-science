@@ -175,5 +175,11 @@ def create_app():
         albumResults = get_album_list(name)
         return str(albumResults)
 
+    @app.route('/reset')
+    def reset():
+        db.drop_all()
+        db.create_all()
+        return render_template('base.html', title='Database has been Reset!')
+
 
     return app
