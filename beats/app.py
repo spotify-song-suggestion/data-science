@@ -174,7 +174,7 @@ def create_app():
     def reset():
         db.drop_all()
         # db.create_all()
-        create_tables()
+        #create_tables()
         return render_template('home.html')
 
 
