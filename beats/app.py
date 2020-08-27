@@ -13,9 +13,11 @@ from json.decoder import JSONDecodeError
 import json as simplejson
 from flask_cors import CORS
 from .db_model import db, Song, History
+import plotly.graph_objects as go
+import plotly
 
 
-from .spotify import search_artist_info, search_track_info, get_album_list, pull_features, plot_it
+from .spotify import search_artist_info, search_track_info, get_album_list, pull_features, plot_radar_one
 # our json friend
 #print(json.dumps(VARIABLE, sort_keys=True, indent=4))
 
@@ -53,7 +55,38 @@ def create_app():
         # have to return these values to the model
         #Features I use in my NN model: ['danceability',  'instrumentalness', 'loudness', 'speechiness',  'valence']
         # TODO separate this into str(track_features[0]['danceability'])
-        return str(track_features[0])
+        danceability =  track_features[0]['danceability']
+        instrumentalness = track_features[0]['instrumentalness']
+        loadness = track_features[0]['loudness']
+        speechiness = track_features[0]['speechiness']
+        valance = track_features[0]['valence']
+        fav_five = [danceability, instrumentalness, loadness, speechiness, valance]
+        '''
+        {'danceability': 0.764, 
+        'energy': 0.887, 
+        'key': 11, 
+        'loudness': -3.725, 
+        'mode': 1, 
+        'speechiness': 0.0738, 
+        'acousticness': 0.0816, 
+        'instrumentalness': 0.000108, 
+        'liveness': 0.847, 
+        'valence': 0.721, 
+        'tempo': 118.421, 
+        'type': 'audio_features', 
+        'id': '7azo4rpSUh8nXgtonC6Pkq', 
+        'uri': 'spotify:track:7azo4rpSUh8nXgtonC6Pkq', 
+        'track_href': 'https://api.spotify.com/v1/tracks/7azo4rpSUh8nXgtonC6Pkq', 
+        'analysis_url': 'https://api.spotify.com/v1/audio-analysis/7azo4rpSUh8nXgtonC6Pkq', 
+        'duration_ms': 358053, 
+        'time_signature': 4}
+        '''
+        y = fav_five
+        x = ['danceability',  'instrumentalness', 'loudness', 'speechiness',  'valence']
+        fig = plot_radar_one(x,y)
+        
+        # return str(fav_five) # this is return for DS ML model
+        return fig
 
 
     @app.route('/songsuggester')
@@ -73,10 +106,10 @@ def create_app():
             # NOTE ssresult this is a list
             print(ssresults)       
             results.append(ssresults)
-        # return str(results) 
-        fig = plot_it()
-        # return render_template('home.html', results=results)
-        return fig
+            
+        return render_template('home.html', results=results)  # this is to render list to webpage
+        # return str(results[0]) #return the first song suggestion
+       
 
 
 

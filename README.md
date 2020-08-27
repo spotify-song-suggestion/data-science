@@ -10,9 +10,11 @@ pip install spotipy --upgrade
 pipenv install python-dotenv
 pipenv install simplejson
 pipenv install  flask-cors
+pipenv install plotly
+
+
+
 to Run flask app
-
-
 
 export FLASK_APP=beats:APP
 flask run

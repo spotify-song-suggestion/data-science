@@ -3,6 +3,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from dotenv import load_dotenv
 import plotly.graph_objects as go
+import plotly.express as px
 # from .db_model import db, User, Tweet
 
 '''
@@ -80,37 +81,25 @@ def pull_features(song_id):
     return track_features
 
 
-# TODO test returning a figure
-# TODO delete this is example from plotly
-def plot_it():
+def plot_radar_one(x, y):
+
+    # name vs song features
     
-
-    categories = ['processing cost','mechanical properties','chemical stability',
-                'thermal stability', 'device integration']
-
-    fig = go.Figure()
-
-    fig.add_trace(go.Scatterpolar(
-        r=[1, 5, 2, 2, 3],
-        theta=categories,
-        fill='toself',
-        name='Product A'
-    ))
-    fig.add_trace(go.Scatterpolar(
-        r=[4, 3, 2.5, 1, 2],
-        theta=categories,
-        fill='toself',
-        name='Product B'
+    fig = go.Figure(data=go.Scatterpolar(
+      r=y,
+      theta=x,
+      fill='toself'
     ))
 
     fig.update_layout(
-    polar=dict(
+      polar=dict(
         radialaxis=dict(
-        visible=True,
-        range=[0, 5]
-        )),
-    showlegend=False
+          visible=True
+        ),
+      ),
+      showlegend=False
     )
-
     fig.show()
+
     return fig
+
