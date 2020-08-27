@@ -57,3 +57,8 @@ create etl route
 # what is a CORS Error 
 we fixed it with 3 lines of CORS code
 CORS error 
+
+
+
+two changes sqlite closed
+open reset
