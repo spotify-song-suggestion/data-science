@@ -43,12 +43,22 @@ def create_app():
     # TODO if song is not in database then pull from spotify api
     # TODO test this #############################################################################################################################
     @app.route('/songfeatures')
-    def sf():
+    def sf(user_input_fav_song=None):
         # TODO user gives us song 
-        user_input_fav_song = "Thriller"
+        # user_input_fav_song = "Thriller"
         # Hard Coded
+        user_input_fav_song =  request.values['user_input_fav_song']
+        if user_input_fav_song == "":
+            return render_template('home.html')
+        if "_" in user_input_fav_song:
+            user_input_fav_song = user_input_fav_song.replace("_"," ")
+        
 
-        user_input_fav_song = user_input_fav_song or request.form['user_input_fav_song']
+
+
+
+
+        # user_input_fav_song = user_input_fav_song or request.values['user_input_fav_song']
 
         results = search_track_info(user_input_fav_song)# api call
 
@@ -73,7 +83,12 @@ def create_app():
         return audio_features # this is return for DS ML model
 
 
-    @app.route('/songsuggester', methods=["POST"])
+
+
+
+
+
+    @app.route('/songsuggester', methods=["GET"])
     def feedmodel():
         db.create_all()
 
