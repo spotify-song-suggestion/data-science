@@ -51,3 +51,5 @@ create etl route
 
 # help stack overflow you're our only hope
  pip freeze > requirement.txt
+
+# must be requirements.txt not the above output
