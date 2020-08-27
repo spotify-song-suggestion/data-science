@@ -73,11 +73,11 @@ def create_app():
         return audio_features # this is return for DS ML model
 
 
-    @app.route('/songsuggester')
+    @app.route('/songsuggester', methods=["POST"])
     def feedmodel():
         db.create_all()
 
-        audio_features =sf()
+        audio_features = sf()
 
         song_list = find_recommended_songs(audio_features)
         
