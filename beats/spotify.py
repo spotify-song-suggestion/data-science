@@ -56,35 +56,33 @@ def search_artist_info(name):
     # print(artist['genres'][0])
     # print(artist['images'][0]['url'])
     '''
-    searchResults = spotify.search(q='artist:' + name, limit=2, offset=0, type=['artist']) #### for spotifyxxx.py
+    searchResults = spotify.search(q='artist:' + name, limit=2, offset=0, type=['artist']) 
     return searchResults
 
 
 def search_track_info(user_input_song):   
-    results = spotify.search(str(user_input_song), type="track", limit=1) #### for spotifyxxx.py
+    results = spotify.search(str(user_input_song), type="track", limit=1) 
     return results
 
 def get_album_list(name):
-    searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])#### for spotifyxxx.py
+    searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])
 
     artist = searchResults['artists']['items'][0]
     artistID = artist['id']
-    albumResults = spotify.artist_albums(artistID)#### for spotifyxxx.py
+    albumResults = spotify.artist_albums(artistID)
     return albumResults
 
 
-
-
-# TODO check this
 def pull_features(song_id):
     track_features = spotify.audio_features(song_id)
     return track_features
 
 
 def plot_radar_one(x, y):
-
-    # name vs song features
-    
+    '''name vs song features
+        y = [fav_five]
+        x = ['danceability',  'instrumentalness', 'loudness', 'speechiness',  'valence']
+    '''
     fig = go.Figure(data=go.Scatterpolar(
       r=y,
       theta=x,

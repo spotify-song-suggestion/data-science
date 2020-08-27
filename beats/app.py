@@ -49,74 +49,38 @@ def create_app():
         # Hard Coded
 
         user_input_fav_song = user_input_fav_song or request.form['user_input_fav_song']
+
         results = search_track_info(user_input_fav_song)# api call
-        
+
         song_id = results['tracks']['items'][0]['id'] # song_id = '6KbQ3uYMLKb5jDxLF7wYDD'
         
         track_features = pull_features(song_id) # api call
-
-        print(simplejson.dumps(track_features, sort_keys=True, indent=4))
-        #using this for ML model
-
-        # have to return these values to the model
-        #Features I use in my NN model: ['danceability',  'instrumentalness', 'loudness', 'speechiness',  'valence']
-        # TODO separate this into str(track_features[0]['danceability'])
+        # To help visualize the json file
+        # print(simplejson.dumps(track_features, sort_keys=True, indent=4))
+        
         danceability =  track_features[0]['danceability']
         instrumentalness = track_features[0]['instrumentalness']
         loadness = track_features[0]['loudness']
         speechiness = track_features[0]['speechiness']
         valance = track_features[0]['valence']
         fav_five = [danceability, instrumentalness, loadness, speechiness, valance]
-        '''
-        {'danceability': 0.764, 
-        'energy': 0.887, 
-        'key': 11, 
-        'loudness': -3.725, 
-        'mode': 1, 
-        'speechiness': 0.0738, 
-        'acousticness': 0.0816, 
-        'instrumentalness': 0.000108, 
-        'liveness': 0.847, 
-        'valence': 0.721, 
-        'tempo': 118.421, 
-        'type': 'audio_features', 
-        'id': '7azo4rpSUh8nXgtonC6Pkq', 
-        'uri': 'spotify:track:7azo4rpSUh8nXgtonC6Pkq', 
-        'track_href': 'https://api.spotify.com/v1/tracks/7azo4rpSUh8nXgtonC6Pkq', 
-        'analysis_url': 'https://api.spotify.com/v1/audio-analysis/7azo4rpSUh8nXgtonC6Pkq', 
-        'duration_ms': 358053, 
-        'time_signature': 4}
-        '''
-        # y = pd.Series(fav_five)
-
-        # model_input  = [features_nums] 
-        # df_new = pd.DataFrame(model_input, columns= wanted_features)
-        # series = df_new.iloc[0, 0:].to_numpy() # audio 
+      
         y = [fav_five]
         x = ['danceability',  'instrumentalness', 'loudness', 'speechiness',  'valence'] # Series
         df_new = pd.DataFrame(y, columns= x)
         audio_features = df_new.iloc[0, 0:].to_numpy() 
 
-        # fig = plot_radar_one(x,y)
-        print(type(y))
-        
         return audio_features # this is return for DS ML model
-        # return fig
 
 
     @app.route('/songsuggester')
     def feedmodel():
         db.create_all()
 
-        # audio_features =sf()
-        audio_features = np.array([  0.708 ,   0.563 , -12.428 ,   0.0506,   0.779 ])
+        audio_features =sf()
+
         song_list = find_recommended_songs(audio_features)
         
-        # song_list = ['6llUzeoGSQ53W3ThFbReE2',
-        #              '22mLKFanGy1bEb0qWuvMV0',
-        #              '0psB5QzGb4653K0uaPgEyh',
-        #              '3R6GxZEzCWDNnwo8QWeOw6']
-                     #Young and Fine,Suck My Kiss, Suck My Kiss, Waiting for Somebody
         results = []
         for song in song_list:
            
@@ -128,16 +92,12 @@ def create_app():
             results.append(ssresults)
             
         return render_template('home.html', results=results)  # this is to render list to webpage
-        # return str(results[0]) #return the first song suggestion
+        # return str(results) #return the list of song suggests
        
-
-
-
-
 
     @app.route('/hello')
     def hello_world():
-        return 'hello'
+        return 'Hello from DSPT5 and DSPT6 Lambda School 2020'
 
     @app.route('/')
     def index():
@@ -158,7 +118,7 @@ def create_app():
     
         input_artist = input_artist or request.values['input_artist']
         if input_artist == "":
-            return "Can't Touch This! Hammer Time!"
+            return render_template('home.html')
         if "_" in input_artist:
             input_artist = input_artist.replace("_"," ")
         name = input_artist
@@ -177,11 +137,17 @@ def create_app():
     @app.route('/track/<user_input_song>', methods=['GET'])
     def output(user_input_song=None):
         # User inputs song name here 
+
         user_input_song = user_input_song or request.form['user_input_song']
+
+        if user_input_song == "":
+            return render_template('home.html')
+        if "_" in user_input_song:
+            user_input_song = user_input_song.replace("_"," ")
+        
+
         results = search_track_info(user_input_song)
 
-        # this helps you fish threw a json 
-        # print(simplejson.dumps(results['tracks']['items'][0]['id'], sort_keys=True, indent=4))
         return results
    
 
@@ -191,7 +157,7 @@ def create_app():
 
         input_artist = input_artist or request.values['input_artist']
         if input_artist == "":
-            return "Can't Touch This! Hammer Time!"
+            return render_template('home.html')
         if "_" in input_artist:
             input_artist = input_artist.replace("_"," ")
         name = input_artist
