@@ -50,26 +50,52 @@ def create_app():
 
 
 
-    # TODO if song is not in database then pull from spotify api
-    @app.route('/songfeatures')
-    def sf(user_input_fav_song=None):
-        # TODO user gives us song 
-        # user_input_fav_song = "Thriller"
-        # Hard Coded
-        user_input_fav_song =  request.values['user_input_fav_song']
+    # # TODO if song is not in database then pull from spotify api
+    # @app.route('/songfeatures')
+    # def sf(user_input_fav_song=None):
+
+    #     user_input_fav_song =  request.values['user_input_fav_song']
+    #     if user_input_fav_song == "":
+    #         return render_template('home.html')
+    #     if "_" in user_input_fav_song:
+    #         user_input_fav_song = user_input_fav_song.replace("_"," ")
+        
+    #     results = search_track_info(user_input_fav_song)# api call
+
+    #     song_id = results['tracks']['items'][0]['id'] 
+        
+    #     track_features = pull_features(song_id) 
+        
+    #     danceability =  track_features[0]['danceability']
+    #     instrumentalness = track_features[0]['instrumentalness']
+    #     loadness = track_features[0]['loudness']
+    #     speechiness = track_features[0]['speechiness']
+    #     valance = track_features[0]['valence']
+    #     fav_five = [danceability, instrumentalness, loadness, speechiness, valance]
+      
+    #     y = [fav_five]
+    #     x = ['danceability',  'instrumentalness', 'loudness', 'speechiness',  'valence'] # Series
+    #     df_new = pd.DataFrame(y, columns= x)
+    #     audio_features = df_new.iloc[0, 0:].to_numpy() 
+
+    #     return audio_features # this is return for DS ML model
+
+
+    @app.route('/songsuggester', methods=["GET"])
+    def feedmodel(user_input_fav_song=None):
+        # TODO
+        # db.create_all()
+        user_input_fav_song = request.values['user_input_fav_song']
         if user_input_fav_song == "":
             return render_template('home.html')
         if "_" in user_input_fav_song:
             user_input_fav_song = user_input_fav_song.replace("_"," ")
         
-
         results = search_track_info(user_input_fav_song)# api call
 
         song_id = results['tracks']['items'][0]['id'] 
         
         track_features = pull_features(song_id) 
-        # To help visualize the json file
-        # print(simplejson.dumps(track_features, sort_keys=True, indent=4))
         
         danceability =  track_features[0]['danceability']
         instrumentalness = track_features[0]['instrumentalness']
@@ -82,16 +108,6 @@ def create_app():
         x = ['danceability',  'instrumentalness', 'loudness', 'speechiness',  'valence'] # Series
         df_new = pd.DataFrame(y, columns= x)
         audio_features = df_new.iloc[0, 0:].to_numpy() 
-
-        return audio_features # this is return for DS ML model
-
-
-    @app.route('/songsuggester', methods=["GET"])
-    def feedmodel():
-        # TODO
-        # db.create_all()
-
-        audio_features = sf()
 
         song_list = find_recommended_songs(audio_features)
         
@@ -122,6 +138,58 @@ def create_app():
         return render_template('home.html', results=results)  # this is to render list to webpage
         # return str(results) #return the list of song suggests
        
+
+    @app.route('/suggest/<user_input_fav_song>', methods=['GET'])
+    def modelweb(user_input_fav_song=None):
+        # user_input_fav_song =  user_input_fav_song or request.values['user_input_fav_song']
+        # if user_input_fav_song == "":
+        #     return render_template('home.html')
+        if "_" in user_input_fav_song:
+            user_input_fav_song = user_input_fav_song.replace("_"," ")
+        
+        results = search_track_info(user_input_fav_song)# api call
+
+        song_id = results['tracks']['items'][0]['id'] 
+        
+        track_features = pull_features(song_id) 
+        
+        danceability =  track_features[0]['danceability']
+        instrumentalness = track_features[0]['instrumentalness']
+        loadness = track_features[0]['loudness']
+        speechiness = track_features[0]['speechiness']
+        valance = track_features[0]['valence']
+        fav_five = [danceability, instrumentalness, loadness, speechiness, valance]
+      
+        y = [fav_five]
+        x = ['danceability',  'instrumentalness', 'loudness', 'speechiness',  'valence'] # Series
+        df_new = pd.DataFrame(y, columns= x)
+        audio_features = df_new.iloc[0, 0:].to_numpy() 
+
+        song_list = find_recommended_songs(audio_features)
+        
+        results = []
+        for song in song_list: 
+            # search api for song features
+            all_audio_features = pull_features(song)
+
+            danceability =  all_audio_features[0]['danceability']
+            instrumentalness = all_audio_features[0]['instrumentalness']
+            loadness = all_audio_features[0]['loudness']
+            speechiness = all_audio_features[0]['speechiness']
+            valance = all_audio_features[0]['valence']
+            
+            result = get_song_info(song)
+            artist = result['album']['artists'][0]['name'] # artist Weather Report
+            track = result['album']['name']  # track                 
+
+            ssresults = (track, artist, danceability, instrumentalness, loadness, speechiness, valance)
+
+            ssresults = str(ssresults) 
+            # NOTE ssresult this is a list
+            results.append(ssresults)
+            
+        return str(results) #return the list of song suggests
+
 
     @app.route('/hello')
     def hello_world():
