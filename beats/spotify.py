@@ -48,6 +48,14 @@ token = credentials.get_access_token()
 spotify = spotipy.Spotify(auth=token)
 spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
 
+
+def get_song_info(song_id):
+    '''
+    for Song Suggester
+    '''
+    results = spotify.track(song_id)
+    return results
+
 def search_artist_info(name):
     '''
     this route returns more info about an artist

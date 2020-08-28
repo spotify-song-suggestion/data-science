@@ -19,7 +19,7 @@ import plotly
 import pickle
 from sklearn.neighbors import NearestNeighbors
 # functions for encapsulation and reabability
-from .spotify import search_artist_info, search_track_info, get_album_list, pull_features, plot_radar_one
+from .spotify import search_artist_info, search_track_info, get_album_list, pull_features, plot_radar_one, get_song_info
 from .suggest import find_recommended_songs
 # from .etl_postgres import create_tables
 
@@ -39,11 +39,14 @@ def create_app():
     filename = 'beats/testing_model.sav'
     loaded_model = pickle.load(open(filename, 'rb'))
 
-    @app.route('/dummy')
-    def jepoy():
-        # dummy will help get track info
-        results = pull_features('6llUzeoGSQ53W3ThFbReE2')
-        return str(results[0]['danceability'])
+    # @app.route('/dummy')
+    # def jepoy():
+    #     # dummy will help get track info
+    #     results = get_song_info('6llUzeoGSQ53W3ThFbReE2')
+    #     # return str(results['album']['artists'][0]['name']) # artist Weather Report
+    #     return str(results['album']['name'])  # track                                   young and fine
+    #     # return str(results['album']["duration_ms"]) # duration 
+
 
 
 
@@ -103,9 +106,15 @@ def create_app():
             speechiness = all_audio_features[0]['speechiness']
             valance = all_audio_features[0]['valence']
             
-            ssresults = [song, danceability, instrumentalness, loadness, speechiness, valance]
-             
-            # ssresults = str(ssresults) 
+            
+
+            result = get_song_info(song)
+            artist = result['album']['artists'][0]['name'] # artist Weather Report
+            track = result['album']['name']  # track                 
+
+            ssresults = (track, artist, danceability, instrumentalness, loadness, speechiness, valance)
+
+            ssresults = str(ssresults) 
             # NOTE ssresult this is a list
             print(ssresults)       
             results.append(ssresults)
