@@ -1,5 +1,15 @@
 # DS API for Best Beats : Spotify Song Suggester
 
+
+## Search Spotify Suggester - Playlist Generator
+
+<li>Use DS API - https://songsuggester-nyc.herokuapp.com/
+<li>Access in Browser - https://songsuggester-nyc.herokuapp.com/suggest/ [fav_song]
+
+<li>results = list(track, artist, danceability, instrumentalness, loadness, speechiness, valance)
+
+
+
 ## Search Spotify API for artist info
 
 <li>Use DS API - https://songsuggester-nyc.herokuapp.com/
