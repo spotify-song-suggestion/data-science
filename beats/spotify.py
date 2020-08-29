@@ -61,7 +61,15 @@ def search_track_info(user_input_song):
 
 
 def get_album_list(name):
+    '''
+    This function uses the Spotify API to find albums list
 
+    params:
+        name : str - name of artist
+
+    returns:
+        json file of all albums info associated with artist
+    '''
     searchResults = spotify.search(q='artist:' + name, limit=1, offset=0, type=['artist'])
 
     artist = searchResults['artists']['items'][0]

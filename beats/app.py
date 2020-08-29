@@ -37,7 +37,16 @@ def create_app():
 
     @app.route('/songsuggester', methods=["GET"])
     def feedmodel(user_input_fav_song=None):
+        '''
+        This function produces a suggested playlist
 
+        params:
+            user_input_fav_song : str - Song Name
+
+        returns :
+            ssresults : list of tuples of
+            (track, artist, danceability, instrumentalness, loadness, speechiness, valance)
+        '''
         user_input_fav_song = request.values['user_input_fav_song']
         if user_input_fav_song == "":
             return render_template('home.html')
@@ -90,6 +99,17 @@ def create_app():
 
     @app.route('/suggest/<user_input_fav_song>', methods=['GET'])
     def modelweb(user_input_fav_song=None):
+        '''
+        This can be accessed thru the web link defined in Documentation.md
+        This function produces a suggested playlist
+
+        params:
+            user_input_fav_song : str - Song Name
+
+        returns :
+            ssresults : list of tuples of
+            (track, artist, danceability, instrumentalness, loadness, speechiness, valance)
+        '''
         if "_" in user_input_fav_song:
             user_input_fav_song = user_input_fav_song.replace("_"," ")
         
@@ -150,8 +170,10 @@ def create_app():
     @app.route('/song')
     def getsong():
         '''
-        this takes the song name and returns song details
-        this takes artist name and returns up to 10 tracks per artist
+        Test page to
+            take the artist name and returns cover art additional artist info
+            takes the song name and returns song details
+            takes artist name and returns up to 10 tracks per artist
         '''
         return render_template('asksong.html')
 
@@ -159,7 +181,15 @@ def create_app():
     @app.route('/artistinfo', methods=['GET'])
     @app.route('/artist/<input_artist>', methods=['GET'])
     def getartist(input_artist=None):
-    
+        '''
+        This function uses spotify.py to find track info
+
+        params:
+            name : str - name of artist
+
+        returns:
+            json file of all artist info     
+        '''   
         input_artist = input_artist or request.values['input_artist']
         if input_artist == "":
             return render_template('home.html')
@@ -176,7 +206,15 @@ def create_app():
     @app.route('/songinfo', methods=['POST']) #/output changed to songinfo
     @app.route('/track/<user_input_song>', methods=['GET'])
     def output(user_input_song=None):
+        '''
+        This function uses spotify.py to find track info
 
+        params:
+            user_input_song : str - name of song
+
+        returns:
+            json file of all track info associated with track
+        '''
         user_input_song = user_input_song or request.form['user_input_song']
         if user_input_song == "":
             return render_template('home.html')
@@ -190,7 +228,15 @@ def create_app():
     @app.route('/getsongs')
     @app.route('/albums/<input_artist>', methods=['GET'])
     def albumlist(input_artist=None):
+        '''
+        This function uses spotify.py to find albums list
 
+        params:
+            name : str - name of artist
+
+        returns:
+            json file of all albums info associated with artist
+        '''
         input_artist = input_artist or request.values['input_artist']
         if input_artist == "":
             return render_template('home.html')
