@@ -2,11 +2,8 @@ import pickle
 import pandas as pd
 
 
-# TODO check slashes window and mac
-# filename = 'beats\\testing_model.sav'
 filename = 'beats/testing_model.sav'
 loaded_model = pickle.load(open(filename, 'rb'))
-# songs_new = pd.read_pickle("beats\\ML_model_db.pkl")
 songs_new = pd.read_pickle("beats/ML_model_db.pkl")
 
 
