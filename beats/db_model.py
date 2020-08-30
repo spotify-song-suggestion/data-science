@@ -1,10 +1,13 @@
+# This is opted out midway through the project
+# the database took too much space in the 
+# hobby level Postgres database
+# therefore we chose to call the api for the necessary info
+
+
 # """Spotify Suggested Playlist Dashboard with Flask."""
 # from flask_sqlalchemy import SQLAlchemy
 
-
-
 # db = SQLAlchemy()
-
 
 # # This class is based off the data.csv file
 # # TODO check types with etl_pipeline.py

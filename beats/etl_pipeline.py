@@ -42,24 +42,3 @@
 # con.commit()
 
 
-
-# # TODO check types with spotify.py
-# # cur.execute("""CREATE TABLE  song (acousticness NUMERIC, 
-# #                                    artists TEXT, 
-# #                                    danceability NUMERIC, 
-# #                                    duration_ms NUMERIC, 
-# #                                    energy NUMERIC, 
-# #                                    explicit NUMERIC, 
-# #                                    id TEXT, 
-# #                                    instrumentalness NUMERIC, 
-# #                                    key INTEGER, 
-# #                                    liveness NUMERIC, 
-# #                                    loudness NUMERIC, 
-# #                                    mode INTEGER, 
-# #                                    name TEXT, 
-# #                                    popularity NUMERIC, 
-# #                                    release_date TEXT, 
-# #                                    speechiness NUMERIC, 
-# #                                    tempo NUMERIC, 
-# #                                    valence NUMERIC, 
-# #                                    year NUMERIC);""")
